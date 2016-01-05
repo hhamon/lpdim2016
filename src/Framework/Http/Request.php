@@ -1,5 +1,7 @@
 <?php
 
+namespace Framework\Http;
+
 class Request
 {
     const GET = 'GET';

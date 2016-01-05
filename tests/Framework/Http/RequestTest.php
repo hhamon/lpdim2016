@@ -1,5 +1,9 @@
 <?php
 
+namespace Tests\Framework\Http;
+
+use Framework\Http\Request;
+
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateRequestInstance()
