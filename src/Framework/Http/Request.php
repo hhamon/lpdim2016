@@ -9,6 +9,7 @@ class Request
     const PUT = 'PUT';
     const PATCH = 'PATCH';
     const OPTIONS = 'OPTIONS';
+    const CONNECT = 'CONNECT';
     const TRACE = 'TRACE';
     const HEAD = 'HEAD';
     const DELETE = 'DELETE';
@@ -35,12 +36,37 @@ class Request
      */
     public function __construct($method, $path, $scheme, $schemeVersion, array $headers = [], $body = '')
     {
-        $this->method = $method;
+        $this->setMethod($method);
         $this->path = $path;
         $this->scheme = $scheme;
         $this->schemeVersion = $schemeVersion;
         $this->headers = $headers;
         $this->body = $body;
+    }
+
+    private function setMethod($method)
+    {
+        $methods = [ 
+            self::GET,
+            self::POST,
+            self::PUT,
+            self::PATCH,
+            self::OPTIONS,
+            self::CONNECT,
+            self::TRACE,
+            self::HEAD,
+            self::DELETE,
+        ];
+
+        if (!in_array($method, $methods)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Method %s is not supported and must be one of %s.',
+                $method,
+                implode(', ', $methods)
+            ));
+        }
+
+        $this->method = $method;
     }
 
     public function getMethod()
