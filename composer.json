@@ -1,0 +1,24 @@
+{
+    "name": "hhamon/lpdim2016",
+    "description": "Another PHP framework",
+    "type": "library",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Hugo Hamon",
+            "email": "hugo.hamon@sensiolabs.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "": "tests/"
+        }
+    },
+    "minimum-stability": "alpha",
+    "require": {}
+}
