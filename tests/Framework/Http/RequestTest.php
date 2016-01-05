@@ -7,6 +7,40 @@ use Framework\Http\Request;
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @dataProvider provideValidHttpScheme
+     */
+    public function testSupportedHttpScheme($scheme)
+    {
+        new Request('GET', '/', $scheme, '1.1');
+    }
+
+    public function provideValidHttpScheme()
+    {
+        return [
+            [ Request::HTTP ],
+            [ Request::HTTPS ],
+        ];
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @dataProvider provideInvalidHttpScheme
+     */
+    public function testUnsupportedHttpScheme($scheme)
+    {
+        new Request('GET', '/', $scheme, '1.1');
+    }
+
+    public function provideInvalidHttpScheme()
+    {
+        return [
+            [ 'FTP' ],
+            [ 'SFTP' ],
+            [ 'SSH' ],
+        ];
+    }
+
+    /**
      * @expectedException \InvalidArgumentException
      * @dataProvider provideInvalidHttpMethod
      */
