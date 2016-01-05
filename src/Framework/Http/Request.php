@@ -17,6 +17,10 @@ class Request
     const HTTP = 'HTTP';
     const HTTPS = 'HTTPS';
 
+    const VERSION_1_0 = '1.0';
+    const VERSION_1_1 = '1.1';
+    const VERSION_2_0 = '2.0';
+
     private $method;
     private $scheme;
     private $schemeVersion;
@@ -39,7 +43,7 @@ class Request
         $this->setMethod($method);
         $this->path = $path;
         $this->setScheme($scheme);
-        $this->schemeVersion = $schemeVersion;
+        $this->setSchemeVersion($schemeVersion);
         $this->headers = $headers;
         $this->body = $body;
     }
@@ -111,5 +115,19 @@ class Request
         }
 
         $this->scheme = $scheme;
+    }
+
+    private function setSchemeVersion($version)
+    {
+        $versions = [ self::VERSION_1_0, self::VERSION_1_1, self::VERSION_2_0 ];
+        if (!in_array($version, $versions)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Scheme version %s is not supported and must be one of %s.',
+                $version,
+                implode(', ', $versions)
+            ));
+        }
+
+        $this->schemeVersion = $version;
     }
 }
