@@ -38,7 +38,7 @@ class Request
     {
         $this->setMethod($method);
         $this->path = $path;
-        $this->scheme = $scheme;
+        $this->setScheme($scheme);
         $this->schemeVersion = $schemeVersion;
         $this->headers = $headers;
         $this->body = $body;
@@ -97,5 +97,19 @@ class Request
     public function getBody()
     {
         return $this->body;
+    }
+
+    private function setScheme($scheme)
+    {
+        $schemes = [ self::HTTP, self::HTTPS ];
+        if (!in_array($scheme, $schemes)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Scheme %s is not supported and must be one of %s.',
+                $scheme,
+                implode(', ', $schemes)
+            ));
+        }
+
+        $this->scheme = $scheme;
     }
 }
