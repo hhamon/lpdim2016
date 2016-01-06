@@ -6,6 +6,48 @@ use Framework\Http\Request;
 
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
+    public function testCreateFromMessage()
+    {
+        $message = <<<MESSAGE
+GET /home HTTP/1.1
+host: http://wikipedia.com
+user-agent: Mozilla/Firefox
+content-type: application/json
+
+{ "foo": "bar" }
+MESSAGE;
+
+        $request = Request::createFromMessage($message);
+
+        $this->assertInstanceOf(Request::class, $request);
+        $this->assertSame($message, $request->getMessage());
+        $this->assertSame($message, (string) $request);
+    }
+
+    public function testGetMessage()
+    {
+        $message = <<<MESSAGE
+GET /home HTTP/1.1
+host: http://wikipedia.com
+user-agent: Mozilla/Firefox
+content-type: application/json
+
+{ "foo": "bar" }
+MESSAGE;
+
+        $body = '{ "foo": "bar" }';
+        $headers = [
+            'Host' => 'http://wikipedia.com',
+            'User-Agent' => 'Mozilla/Firefox',
+            'Content-Type' => 'application/json',
+        ];
+
+        $request = new Request('GET', '/home', 'HTTP', '1.1', $headers, $body);
+
+        $this->assertSame($message, $request->getMessage());
+        $this->assertSame($message, (string) $request);
+    }
+
     /**
      * @expectedException \RuntimeException
      */
@@ -115,26 +157,35 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateRequestInstance($method, $path)
     {
-        $request = new Request($method, $path, Request::HTTP, '1.1', [
+        $body = '{ "foo": "bar" }';
+        $headers = [
             'Host' => 'http://wikipedia.com',
             'User-Agent' => 'Mozilla/Firefox',
-        ]);
+            'Content-Type' => 'application/json',
+        ];
+
+        $request = new Request($method, $path, Request::HTTP, '1.1', $headers, $body);
 
         $this->assertSame($method, $request->getMethod());
         $this->assertSame($path, $request->getPath());
         $this->assertSame(Request::HTTP, $request->getScheme());
         $this->assertSame('1.1', $request->getSchemeVersion());
-        $this->assertEmpty($request->getBody());
+        $this->assertSame($body, $request->getBody());
 
-        $this->assertCount(2, $request->getHeaders());
+        $this->assertCount(3, $request->getHeaders());
 
         $this->assertSame(
-            [ 'host' => 'http://wikipedia.com', 'user-agent' => 'Mozilla/Firefox' ],
+            [
+                'host' => 'http://wikipedia.com',
+                'user-agent' => 'Mozilla/Firefox',
+                'content-type' => 'application/json',
+            ],
             $request->getHeaders()
         );
 
         $this->assertSame('http://wikipedia.com', $request->getHeader('Host'));
         $this->assertSame('Mozilla/Firefox', $request->getHeader('User-Agent'));
+        $this->assertSame('application/json', $request->getHeader('Content-Type'));
     }
 
     public function provideRequestParameters()
