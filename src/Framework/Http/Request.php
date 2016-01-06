@@ -78,14 +78,14 @@ class Request
     public static function createFromMessage($message)
     {
         if (!is_string($message) || empty($message)) {
-            throw new \InvalidArgumentException('HTTP message is not valid.');
+            throw new MalformedHttpMessageException($message, 'HTTP message is not valid.');
         }
 
         // 1. Parse prologue (first required line)
         $lines = explode(PHP_EOL, $message);
         $result = preg_match('#^(?P<method>[A-Z]{3,7}) (?P<path>.+) (?P<scheme>HTTPS?)\/(?P<version>[1-2]\.[0-2])$#', $lines[0], $matches);
         if (!$result) {
-            throw new \RuntimeException('HTTP message prologue is malformed.');
+            throw new MalformedHttpMessageException($message, 'HTTP message prologue is malformed.');
         }
 
         array_shift($lines);
@@ -96,7 +96,7 @@ class Request
         while ($line = $lines[$i]) {
             $result = preg_match('#^([a-z][a-z0-9-]+)\: (.+)$#i', $line, $header);
             if (!$result) {
-                throw new \RuntimeException(sprintf('Invalid header line at position %u: %s', $i+2, $line));
+                throw new MalformedHttpHeaderException(sprintf('Invalid header line at position %u: %s', $i+2, $line));
             }
             list(, $name, $value) = $header;
 
