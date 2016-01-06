@@ -2,15 +2,8 @@
 
 namespace Framework\Http;
 
-abstract class AbstractMessage
+abstract class AbstractMessage implements MessageInterface
 {
-    const HTTP = 'HTTP';
-    const HTTPS = 'HTTPS';
-
-    const VERSION_1_0 = '1.0';
-    const VERSION_1_1 = '1.1';
-    const VERSION_2_0 = '2.0';
-
     protected $scheme;
     protected $schemeVersion;
     protected $headers;

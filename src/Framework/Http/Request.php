@@ -2,18 +2,8 @@
 
 namespace Framework\Http;
 
-class Request extends AbstractMessage
+class Request extends AbstractMessage implements RequestInterface
 {
-    const GET = 'GET';
-    const POST = 'POST';
-    const PUT = 'PUT';
-    const PATCH = 'PATCH';
-    const OPTIONS = 'OPTIONS';
-    const CONNECT = 'CONNECT';
-    const TRACE = 'TRACE';
-    const HEAD = 'HEAD';
-    const DELETE = 'DELETE';
-
     private $method;
     private $path;
 

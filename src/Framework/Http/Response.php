@@ -2,7 +2,7 @@
 
 namespace Framework\Http;
 
-class Response extends AbstractMessage
+class Response extends AbstractMessage implements ResponseInterface
 {
     private $statusCode;
 
