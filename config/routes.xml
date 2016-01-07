@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<routes>
+    <route name="hello" path="/hello">
+        <param key="_controller">Application\Controller\HelloWorldAction</param>
+    </route>
+</routes>
