@@ -7,7 +7,7 @@ use Framework\Http\StreamableInterface;
 use Framework\Kernel;
 use Framework\Routing\Router;
 
-$router = new Router(include(__DIR__.'/../config/routes.php'));
+$router = new Router(__DIR__.'/../config/routes.php');
 $kernel = new Kernel($router);
 
 $response = $kernel->handle(Request::createFromGlobals());
