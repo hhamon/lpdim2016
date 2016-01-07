@@ -9,7 +9,7 @@ class PhpFileLoader implements FileLoaderInterface
     public function load($path)
     {
         if ('php' !== pathinfo($path, PATHINFO_EXTENSION)) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new UnsupportedFileTypeException(sprintf(
                 'File %s must be a valid PHP file.',
                 $path
             ));

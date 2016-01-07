@@ -10,7 +10,7 @@ class XmlFileLoader implements FileLoaderInterface
     public function load($path)
     {
         if ('xml' !== pathinfo($path, PATHINFO_EXTENSION)) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new UnsupportedFileTypeException(sprintf(
                 'File %s must be a valid XML file.',
                 $path
             ));
@@ -57,7 +57,7 @@ class XmlFileLoader implements FileLoaderInterface
     private function parseRouteParams(\SimpleXMLElement $route, $name)
     {
         $params = [];
-        if (!count($route)) {
+        if (!$route->count()) {
             return $params;
         }
 
