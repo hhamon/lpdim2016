@@ -5,9 +5,18 @@ namespace Framework;
 use Framework\Http\RequestInterface;
 use Framework\Http\Response;
 use Framework\Http\ResponseInterface;
+use Framework\Routing\RouteNotFoundException;
+use Framework\Routing\RouterInterface;
 
 class Kernel implements KernelInterface
 {
+    private $router;
+
+    public function __construct(RouterInterface $router)
+    {
+        $this->router = $router;
+    }
+
     /**
      * Converts a Request object into a Response object.
      *
@@ -16,12 +25,29 @@ class Kernel implements KernelInterface
      */
     public function handle(RequestInterface $request)
     {
-        return new Response(
-            Response::HTTP_OK,
-            $request->getScheme(),
-            $request->getSchemeVersion(),
-            [ 'Content-Type' => 'application/json'],
-            json_encode([ 'Hello' => 'World!' ])
-        );
+        $response = null;
+
+        try {
+            $params = $this->router->match($request->getPath());
+        } catch (RouteNotFoundException $e) {
+            return new Response(
+                404,
+                $request->getScheme(),
+                $request->getSchemeVersion(),
+                [],
+                'Page Not Found'
+            );
+        }
+
+        if (!empty($params['_controller'])) {
+            $action = new $params['_controller']();
+            $response = call_user_func_array($action, [ $request ]);
+        }
+
+        if (!$response instanceof ResponseInterface) {
+            throw new \RuntimeException('A response instance must be set.');
+        }
+
+        return $response;
     }
 }
