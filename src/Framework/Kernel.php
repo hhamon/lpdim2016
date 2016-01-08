@@ -9,7 +9,6 @@ use Framework\Routing\MethodNotAllowedException;
 use Framework\Routing\RequestContext;
 use Framework\Routing\RouteNotFoundException;
 use Framework\ServiceLocator\ServiceLocatorInterface;
-use Framework\Templating\ResponseRendererInterface;
 
 class Kernel implements KernelInterface
 {
@@ -40,6 +39,7 @@ class Kernel implements KernelInterface
         } catch (MethodNotAllowedException $e) {
             return $this->createResponse($request, 'Method Not Allowed', Response::HTTP_METHOD_NOT_ALLOWED);
         } catch (\Exception $e) {
+            //echo $e->getMessage();die;
             return $this->createResponse($request, 'Internal Server Error', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
