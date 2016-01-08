@@ -17,6 +17,7 @@ use Framework\Templating\TwigRendererAdapter;
 $loader = new \Twig_Loader_Filesystem(__DIR__.'/../app/views');
 $twig = new \Twig_Environment($loader, array(
     'cache' => __DIR__.'/../app/cache/twig',
+    'debug' => true,
 ));
 
 //$renderer = new PhpRenderer(__DIR__.'/../app/views');

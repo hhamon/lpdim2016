@@ -1,0 +1,12 @@
+<html>
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+        <h1>{{ block('title') }}</h1>
+        {% block body %}{% endblock %}
+
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

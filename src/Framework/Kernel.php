@@ -39,7 +39,7 @@ class Kernel implements KernelInterface
         try {
             return $this->doHandle($request);
         } catch (RouteNotFoundException $e) {
-            return $this->renderer->renderResponse('errors/404.php', [ 'request' => $request, 'exception' => $e ], Response::HTTP_NOT_FOUND);
+            return $this->renderer->renderResponse('errors/404.twig', [ 'request' => $request, 'exception' => $e ], Response::HTTP_NOT_FOUND);
         } catch (MethodNotAllowedException $e) {
             return $this->createResponse($request, 'Method Not Allowed', Response::HTTP_METHOD_NOT_ALLOWED);
         } catch (\Exception $e) {
