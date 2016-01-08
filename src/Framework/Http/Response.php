@@ -34,6 +34,11 @@ class Response extends AbstractMessage implements ResponseInterface, StreamableI
         $this->setStatusCode($statusCode);
     }
 
+    public static function createFromRequest(MessageInterface $request, $content, $statusCode, $headers = [])
+    {
+        return new self($statusCode, $request->getScheme(), $request->getSchemeVersion(), $headers, $content);
+    }
+
     public function getStatusCode()
     {
         return $this->statusCode;
