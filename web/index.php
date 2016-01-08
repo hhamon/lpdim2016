@@ -12,9 +12,16 @@ use Framework\Routing\Loader\PhpFileLoader;
 use Framework\Routing\Loader\XmlFileLoader;
 use Framework\Templating\BracketRenderer;
 use Framework\Templating\PhpRenderer;
+use Framework\Templating\TwigRendererAdapter;
 
-$renderer = new PhpRenderer(__DIR__.'/../app/views');
-$renderer = new BracketRenderer(__DIR__.'/../app/views');
+$loader = new \Twig_Loader_Filesystem(__DIR__.'/../app/views');
+$twig = new \Twig_Environment($loader, array(
+    'cache' => __DIR__.'/../app/cache/twig',
+));
+
+//$renderer = new PhpRenderer(__DIR__.'/../app/views');
+//$renderer = new BracketRenderer(__DIR__.'/../app/views');
+$renderer = new TwigRendererAdapter($twig);
 
 $loader = new CompositeFileLoader();
 $loader->add(new PhpFileLoader());

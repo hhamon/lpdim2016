@@ -3,3 +3,5 @@
 /bin
 /vendor
 /coverage
+!/app/cache/.gitkeep
+/app/cache
