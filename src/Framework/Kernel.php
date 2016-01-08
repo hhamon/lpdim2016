@@ -13,10 +13,12 @@ use Framework\Routing\RouterInterface;
 class Kernel implements KernelInterface
 {
     private $router;
+    private $controllers;
 
-    public function __construct(RouterInterface $router)
+    public function __construct(RouterInterface $router, ControllerFactoryInterface $controllers)
     {
         $this->router = $router;
+        $this->controllers = $controllers;
     }
 
     /**
@@ -41,21 +43,7 @@ class Kernel implements KernelInterface
     private function doHandle(RequestInterface $request)
     {
         $context = RequestContext::createFromRequest($request);
-
-        $params = $this->router->match($context);
-        if (empty($params['_controller'])) {
-            throw new \RuntimeException(sprintf('No controller set for "%s".', (string) $context));
-        }
-
-        $class = $params['_controller'];
-        if (!class_exists($class)) {
-            throw new \RuntimeException(sprintf('Controller class "%s" does not exist or cannot be autoloaded.', $class));
-        }
-
-        $action = new $class();
-        if (!is_callable($action)) {
-            throw new \RuntimeException('Controller is not a valid PHP callable object. Make sure the __invoke() method is implemented!');
-        }
+        $action = $this->controllers->createController($this->router->match($context));
 
         $response = call_user_func_array($action, [ $request ]);
 
