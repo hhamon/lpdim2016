@@ -10,27 +10,43 @@ use Framework\Routing\Router;
 use Framework\Routing\Loader\CompositeFileLoader;
 use Framework\Routing\Loader\PhpFileLoader;
 use Framework\Routing\Loader\XmlFileLoader;
+use Framework\ServiceLocator\ServiceLocator;
 use Framework\Templating\BracketRenderer;
 use Framework\Templating\PhpRenderer;
 use Framework\Templating\TwigRendererAdapter;
 
-$loader = new \Twig_Loader_Filesystem(__DIR__.'/../app/views');
-$twig = new \Twig_Environment($loader, array(
+$dic = new ServiceLocator();
+$dic->setParameter('router.file', __DIR__.'/../app/config/routes.xml');
+$dic->setParameter('app.views_dir', __DIR__.'/../app/views');
+$dic->setParameter('twig.options', [
     'cache' => __DIR__.'/../app/cache/twig',
     'debug' => true,
-));
+]);
 
-//$renderer = new PhpRenderer(__DIR__.'/../app/views');
-//$renderer = new BracketRenderer(__DIR__.'/../app/views');
-$renderer = new TwigRendererAdapter($twig);
+$dic->register('twig', function (ServiceLocator $dic) {
+    return new \Twig_Environment(
+        new \Twig_Loader_Filesystem($dic->getParameter('app.views_dir')),
+        $dic->getParameter('twig.options')
+    );
+});
 
-$loader = new CompositeFileLoader();
-$loader->add(new PhpFileLoader());
-$loader->add(new XmlFileLoader());
+$dic->register('renderer', function (ServiceLocator $dic) {
+    return new TwigRendererAdapter($dic->getService('twig'));
+});
 
-$router = new Router(__DIR__.'/../app/config/routes.xml', $loader);
-$kernel = new Kernel($router, new ControllerFactory(), $renderer);
+$dic->register('router', function (ServiceLocator $dic) {
+    $loader = new CompositeFileLoader();
+    $loader->add(new PhpFileLoader());
+    $loader->add(new XmlFileLoader());
 
+    return new Router($dic->getParameter('router.file'), $loader);
+});
+
+$dic->register('controller_factory', function () {
+    return new ControllerFactory();
+});
+
+$kernel = new Kernel($dic);
 $response = $kernel->handle(Request::createFromGlobals());
 
 if ($response instanceof StreamableInterface) {

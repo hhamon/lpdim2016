@@ -8,24 +8,21 @@ use Framework\Http\ResponseInterface;
 use Framework\Routing\MethodNotAllowedException;
 use Framework\Routing\RequestContext;
 use Framework\Routing\RouteNotFoundException;
-use Framework\Routing\RouterInterface;
+use Framework\ServiceLocator\ServiceLocatorInterface;
 use Framework\Templating\ResponseRendererInterface;
 
 class Kernel implements KernelInterface
 {
-    private $router;
-    private $controllers;
-    private $renderer;
+    private $dic;
 
-    public function __construct(
-        RouterInterface $router,
-        ControllerFactoryInterface $controllers,
-        ResponseRendererInterface $renderer
-    )
+    public function __construct(ServiceLocatorInterface $dic)
     {
-        $this->router = $router;
-        $this->controllers = $controllers;
-        $this->renderer = $renderer;
+        $this->dic = $dic;
+    }
+
+    private function getService($name)
+    {
+        return $this->dic->getService($name);
     }
 
     /**
@@ -39,7 +36,7 @@ class Kernel implements KernelInterface
         try {
             return $this->doHandle($request);
         } catch (RouteNotFoundException $e) {
-            return $this->renderer->renderResponse('errors/404.twig', [ 'request' => $request, 'exception' => $e ], Response::HTTP_NOT_FOUND);
+            return $this->getService('renderer')->renderResponse('errors/404.twig', [ 'request' => $request, 'exception' => $e ], Response::HTTP_NOT_FOUND);
         } catch (MethodNotAllowedException $e) {
             return $this->createResponse($request, 'Method Not Allowed', Response::HTTP_METHOD_NOT_ALLOWED);
         } catch (\Exception $e) {
@@ -49,11 +46,14 @@ class Kernel implements KernelInterface
 
     private function doHandle(RequestInterface $request)
     {
+        $router = $this->getService('router');
+        $factory = $this->getService('controller_factory');
+
         $context = RequestContext::createFromRequest($request);
-        $action = $this->controllers->createController($this->router->match($context));
+        $action = $factory->createController($router->match($context));
 
         if ($action instanceof AbstractAction) {
-            $action->setRenderer($this->renderer);
+            $action->setRenderer($this->getService('renderer'));
         }
 
         $response = call_user_func_array($action, [ $request ]);
