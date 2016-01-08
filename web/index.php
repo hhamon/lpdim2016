@@ -2,6 +2,7 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
+use Application\Repository\BlogPostRepository;
 use Framework\Http\Request;
 use Framework\Http\StreamableInterface;
 use Framework\Kernel;
@@ -28,6 +29,10 @@ $dic->setParameter('twig.options', [
     'cache' => __DIR__.'/../app/cache/twig',
     'debug' => true,
 ]);
+
+$dic->register('repository.blog_post', function (ServiceLocator $dic) {
+    return new BlogPostRepository($dic->getService('database'));
+});
 
 $dic->register('database', function (ServiceLocator $dic) {
     return new \PDO(

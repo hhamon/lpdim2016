@@ -55,14 +55,15 @@ class XmlFileLoader implements FileLoaderInterface
         }
 
         $params = $this->parseRouteParams($route, $name);
+        $requirements = $this->parseRouteRequirements($route, $name);
 
-        $routes->add($name, new Route((string) $route['path'], $params, $methods));
+        $routes->add($name, new Route((string) $route['path'], $params, $methods, $requirements));
     }
 
     private function parseRouteParams(\SimpleXMLElement $route, $name)
     {
         $params = [];
-        if (!$route->count()) {
+        if (!count($route->param)) {
             return $params;
         }
 
@@ -84,5 +85,32 @@ class XmlFileLoader implements FileLoaderInterface
         }
 
         return [ (string) $param['key'] => (string) $param ];
+    }
+
+    private function parseRouteRequirements(\SimpleXMLElement $route, $name)
+    {
+        $requirements = [];
+        if (!count($route->requirement)) {
+            return $requirements;
+        }
+
+        foreach ($route->requirement as $position => $requirement) {
+            $requirements = array_merge($requirements, $this->parseRouteRequirement($name, $requirement, $position));
+        }
+
+        return $requirements;
+    }
+
+    private function parseRouteRequirement($name, \SimpleXMLElement $requirement, $position)
+    {
+        if (empty($requirement['key'])) {
+            throw new \RuntimeException(sprintf(
+                'Requirement #%u for route %s must have a "key" attribute.',
+                $position,
+                $name
+            ));
+        }
+
+        return [ (string) $requirement['key'] => (string) $requirement ];
     }
 }

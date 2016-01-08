@@ -3,14 +3,7 @@
 {% block title %}Blog{% endblock %}
 
 {% block body %}
-
     {% for post in posts %}
-
-        <h2>{{ post.title|title }}</h2>
-        <h3>Published on {{ post.published_at|date('d/m/Y H:i') }}.</h3>
-        <p>
-            {{ post.content|nl2br }}
-        </p>
+        {{ include('blog/post.twig') }}
     {% endfor %}
-
 {% endblock %}

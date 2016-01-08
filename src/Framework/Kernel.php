@@ -2,6 +2,8 @@
 
 namespace Framework;
 
+use Framework\Http\AttributeHolderInterface;
+use Framework\Http\HttpNotFoundException;
 use Framework\Http\RequestInterface;
 use Framework\Http\Response;
 use Framework\Http\ResponseInterface;
@@ -36,6 +38,8 @@ class Kernel implements KernelInterface
             return $this->doHandle($request);
         } catch (RouteNotFoundException $e) {
             return $this->getService('renderer')->renderResponse('errors/404.twig', [ 'request' => $request, 'exception' => $e ], Response::HTTP_NOT_FOUND);
+        } catch (HttpNotFoundException $e) {
+            return $this->getService('renderer')->renderResponse('errors/404.twig', [ 'request' => $request, 'exception' => $e ], Response::HTTP_NOT_FOUND);
         } catch (MethodNotAllowedException $e) {
             return $this->createResponse($request, 'Method Not Allowed', Response::HTTP_METHOD_NOT_ALLOWED);
         } catch (\Exception $e) {
@@ -50,7 +54,13 @@ class Kernel implements KernelInterface
         $factory = $this->getService('controller_factory');
 
         $context = RequestContext::createFromRequest($request);
-        $action = $factory->createController($router->match($context));
+        $params = $router->match($context);
+
+        if ($request instanceof AttributeHolderInterface) {
+            $request->setAttributes($params);
+        }
+
+        $action = $factory->createController($params);
 
         if ($action instanceof AbstractAction) {
             $action->setServiceLocator($this->dic);

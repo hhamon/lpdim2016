@@ -16,6 +16,15 @@ class RouteCollection implements \Iterator, \Countable
         $this->routes = [];
     }
 
+    public function getName(Route $route)
+    {
+        foreach ($this->routes as $name => $oneRoute) {
+            if ($route === $oneRoute) {
+                return $name;
+            }
+        }
+    }
+
     public function merge(RouteCollection $routes, $override = false)
     {
         foreach ($routes as $name => $route) {

@@ -2,10 +2,11 @@
 
 namespace Framework\Http;
 
-class Request extends AbstractMessage implements RequestInterface
+class Request extends AbstractMessage implements RequestInterface, AttributeHolderInterface
 {
     private $method;
     private $path;
+    private $attributes;
 
     /**
      * Constructor.
@@ -21,6 +22,7 @@ class Request extends AbstractMessage implements RequestInterface
     {
         parent::__construct($scheme, $schemeVersion, $headers, $body);
 
+        $this->attributes = [];
         $this->setMethod($method);
         $this->path = $path;
     }
@@ -102,5 +104,34 @@ class Request extends AbstractMessage implements RequestInterface
     protected function createPrologue()
     {
         return sprintf('%s %s %s/%s', $this->method, $this->path, $this->scheme, $this->schemeVersion);
+    }
+
+    public function setAttributes(array $attributes)
+    {
+        $this->attributes = $attributes;
+    }
+
+    public function setAttribute($name, $value)
+    {
+        $this->attributes[$name] = $value;
+    }
+
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
+    public function getAttribute($name, $default = null)
+    {
+        if ($this->hasAttribute($name)) {
+            return $this->attributes[$name];
+        }
+
+        return $default;
+    }
+
+    public function hasAttribute($name)
+    {
+        return isset($this->attributes[$name]);
     }
 }

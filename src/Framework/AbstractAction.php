@@ -2,7 +2,6 @@
 
 namespace Framework;
 
-use Framework\Http\RequestInterface;
 use Framework\ServiceLocator\ServiceLocatorInterface;
 
 abstract class AbstractAction
@@ -13,8 +12,6 @@ abstract class AbstractAction
      * @var ServiceLocatorInterface
      */
     private $dic;
-
-    abstract public function __invoke(RequestInterface $request);
 
     public function setServiceLocator(ServiceLocatorInterface $dic)
     {

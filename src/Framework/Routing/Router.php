@@ -33,6 +33,9 @@ class Router implements RouterInterface
             throw new MethodNotAllowedException($method, $allowedMethods);
         }
 
-        return $route->getParameters();
+        return array_merge(
+            [ '_route' => $this->routes->getName($route) ],
+            $route->getParameters()
+        );
     }
 }
