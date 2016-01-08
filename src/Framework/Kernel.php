@@ -52,7 +52,7 @@ class Kernel implements KernelInterface
         $context = RequestContext::createFromRequest($request);
         $action = $this->controllers->createController($this->router->match($context));
 
-        if (method_exists($action, 'setRenderer')) {
+        if ($action instanceof AbstractAction) {
             $action->setRenderer($this->renderer);
         }
 
