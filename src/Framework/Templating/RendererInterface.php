@@ -11,6 +11,8 @@ interface RendererInterface
      * @param array  $vars The view variables
      *
      * @return string
+     *
+     * @throws TemplateNotFoundException When template does not exist
      */
     public function render($view, array $vars = []);
 }

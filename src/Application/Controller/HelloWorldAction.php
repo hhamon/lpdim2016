@@ -21,6 +21,6 @@ final class HelloWorldAction
 
     public function __invoke(RequestInterface $request)
     {
-        return $this->renderer->renderResponse('hello.php', [ 'name' => 'hugo' ]);
+        return $this->renderer->renderResponse('hello.tpl', [ 'name' => 'hugo' ]);
     }
 }

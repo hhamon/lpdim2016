@@ -10,9 +10,11 @@ use Framework\Routing\Router;
 use Framework\Routing\Loader\CompositeFileLoader;
 use Framework\Routing\Loader\PhpFileLoader;
 use Framework\Routing\Loader\XmlFileLoader;
+use Framework\Templating\BracketRenderer;
 use Framework\Templating\PhpRenderer;
 
 $renderer = new PhpRenderer(__DIR__.'/../app/views');
+$renderer = new BracketRenderer(__DIR__.'/../app/views');
 
 $loader = new CompositeFileLoader();
 $loader->add(new PhpFileLoader());
