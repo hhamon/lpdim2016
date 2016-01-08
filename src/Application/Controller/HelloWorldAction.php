@@ -3,18 +3,24 @@
 namespace Application\Controller;
 
 use Framework\Http\RequestInterface;
-use Framework\Http\Response;
+use Framework\Templating\ResponseRendererInterface;
 
 final class HelloWorldAction
 {
+    /**
+     * The template engine.
+     *
+     * @var ResponseRendererInterface
+     */
+    private $renderer;
+
+    public function setRenderer(ResponseRendererInterface $renderer)
+    {
+        $this->renderer = $renderer;
+    }
+
     public function __invoke(RequestInterface $request)
     {
-        return new Response(
-            Response::HTTP_OK,
-            $request->getScheme(),
-            $request->getSchemeVersion(),
-            [ 'Content-Type' => 'application/json'],
-            json_encode([ 'Hello' => 'World!' ])
-        );
+        return $this->renderer->renderResponse('hello.php', [ 'name' => 'hugo' ]);
     }
 }
