@@ -2,24 +2,34 @@
 
 namespace Framework;
 
-use Framework\Templating\ResponseRendererInterface;
+use Framework\ServiceLocator\ServiceLocatorInterface;
 
 abstract class AbstractAction
 {
     /**
-     * The template engine.
+     * The dependency injection container.
      *
-     * @var ResponseRendererInterface
+     * @var ServiceLocatorInterface
      */
-    private $renderer;
+    private $dic;
 
-    public function setRenderer(ResponseRendererInterface $renderer)
+    public function setServiceLocator(ServiceLocatorInterface $dic)
     {
-        $this->renderer = $renderer;
+        $this->dic = $dic;
+    }
+
+    protected function getParameter($key)
+    {
+        return $this->dic->getParameter($key);
+    }
+
+    protected function getService($name)
+    {
+        return $this->dic->getService($name);
     }
 
     protected function render($view, array $vars)
     {
-        return $this->renderer->renderResponse($view, $vars);
+        return $this->getService('renderer')->renderResponse($view, $vars);
     }
 }

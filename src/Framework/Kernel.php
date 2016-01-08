@@ -53,7 +53,7 @@ class Kernel implements KernelInterface
         $action = $factory->createController($router->match($context));
 
         if ($action instanceof AbstractAction) {
-            $action->setRenderer($this->getService('renderer'));
+            $action->setServiceLocator($this->dic);
         }
 
         $response = call_user_func_array($action, [ $request ]);
