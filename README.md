@@ -122,9 +122,9 @@ la racine du projet.
         └── twig
 
 Par exemple, comme le montre le snippet ci-dessous, le projet réalisé en cours a
-besoin d'un certain nombre d'outils tiers tels que Twig, Symfony ou bien encore
-Monolog. Ces dépendances sont décrites à la section `require` dans le fichier
-`composer.json` situé à la racine du projet.
+besoin d'un certain nombre d'outils tiers tels que Twig ou Symfony. Ces
+dépendances sont décrites à la section `require` dans le fichier `composer.json`
+situé à la racine du projet.
 
 ```php
 {
@@ -151,8 +151,7 @@ Monolog. Ces dépendances sont décrites à la section `require` dans le fichier
     "minimum-stability": "alpha",
     "require": {
         "twig/twig": "^1.23",
-        "symfony/yaml": "^3.0",
-        "monolog/monolog": "^1.17"
+        "symfony/yaml": "^3.0"
     }
 }
 ```
@@ -502,19 +501,6 @@ réponse. Pour ce faire, il utilise la méthode `handle()` de l'interface
 `Framework\KernelInterface` et s'appuie sur son registre de services
 (*Service Locator*) passé à son constructeur.
 
-La méthode `handle()` propage des événements de pré-traitement et de
-post-traitement de la requête grâce au service `event_dispatcher` de type
-`Symfony\Component\EventDispatcher\EventDispatcher`. Ces événements rendent
-possible l'extension du noyau en certains points stratégiques du traitement de
-la requête sans changer l'algorithme de la méthode `handle()`. Celle-ci est
-d'ailleurs déclarée finale. Le fait d'utiliser un gestionnaire d'événements dans
-cette méthode finale pour étendre dynamiquement le noyau est une autre
-implémentation du patron de conception *Patron de Méthode*.
-
-**Note :** le composant `EventDispatcher` de Symfony est une implémentation du
-patron de conception *Médiateur* (aka *Mediator*), lui même issu du patron de
-conception *Observateur* (aka *Observer*).
-
 La méthode `doHandle()` de la classe `Framework\Kernel` tente de convertir la
 requête en réponse en invoquant un contrôleur. Avant de parvenir au contrôleur,
 le noyau doit d'abord demander au service routeur si l'url de la requête
@@ -526,13 +512,6 @@ des attributs de la requête. Il ne reste au noyau plus qu'à invoquer
 dynamiquement le contrôleur à l'aide de la fonction native PHP
 `call_user_func_array()`. Le contrôleur reçoit de la part du noyau la référence
 à la requête et retourne à ce dernier un objet de réponse.
-
-En cas d'erreur lors du traitement de la requête, le noyau attrape en plein vol
-n'importe quel type d'exception et le traite à l'aide de sa méthode privée
-`doHandleException()`. Celle-ci enregistre les informations de l'exception dans
-le gestionnaire de journaux (service `logger`) et retourne une réponse HTTP
-conforme au client (`404` ou `500`). La journalisation des erreurs est assurée
-par la bibliothèque Open-Source *Monolog*.
 
 Le noyau de l'application est utilisé comme une implémentation du patron
 d'architecture *Contrôleur Frontal* (aka *Front Controller*). Il s'agit du point
@@ -1154,7 +1133,7 @@ et sur lesquels porteront l'évaluation écrite.
 | Standards         | Protocole HTTP, PHP PSR, PHP FIG                                                  |
 | P. Orientée Objet | classes, méthodes, interfaces, abstract, final, static, principe SOLID            |
 | Tests unitaires   | PHPUnit, TDD, Code Coverage                                                       |
-| Outils            | Composer, PHPUnit, Twig, Symfony, Monolog, XDebug, Git                            |
+| Outils            | Composer, PHPUnit, Twig, Symfony, XDebug, Git                            |
 | Design Patterns   | Template Method, Adapter, Factory Method, Composite, Strategy, Mediator, Observer |
 | Architecture      | MVC, Service Locator, Dependency Injection, Lazy Loading                          |
 | Base de données   | MySQL, Innodb, SQL, transaction, requêtes préparées                               |
