@@ -32,7 +32,7 @@ class Kernel implements KernelInterface
      * @param RequestInterface $request
      * @return ResponseInterface
      */
-    public function handle(RequestInterface $request)
+    final public function handle(RequestInterface $request)
     {
         try {
             return $this->doHandle($request);

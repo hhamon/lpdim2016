@@ -53,6 +53,11 @@ class RouteCollection implements \Iterator, \Countable
         $this->routes[$name] = $route;
     }
 
+    public function getRoutes()
+    {
+        return $this->routes;
+    }
+
     public function current()
     {
         return current($this->routes);

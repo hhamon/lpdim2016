@@ -8,9 +8,9 @@ class ServiceLocator implements ServiceLocatorInterface
     private $definitions;
     private $services;
 
-    public function __construct()
+    public function __construct(array $parameters)
     {
-        $this->parameters = [];
+        $this->parameters = $parameters;
         $this->definitions = [];
         $this->services = [];
     }

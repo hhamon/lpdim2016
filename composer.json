@@ -21,6 +21,8 @@
     },
     "minimum-stability": "alpha",
     "require": {
-        "twig/twig": "^1.23"
+        "twig/twig": "^1.23",
+        "symfony/yaml": "^3.0",
+        "monolog/monolog": "^1.17"
     }
 }
