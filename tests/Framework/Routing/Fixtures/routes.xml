@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<routes>
+    <route name="homepage" path="/" methods="GET">
+        <param key="_controller">Application\Controller\Blog\ListPostsAction</param>
+    </route>
+
+    <route name="blog" path="/blog" methods="GET">
+        <param key="_controller">Application\Controller\Blog\ListPostsAction</param>
+    </route>
+
+    <route name="blog_post" path="/blog/article-{id}.html" methods="GET">
+        <param key="_controller">Application\Controller\Blog\GetPostAction</param>
+        <requirement key="id">\d+</requirement>
+    </route>
+
+    <route name="hello" path="/hello" methods="GET">
+        <param key="_controller">Application\Controller\HelloWorldAction</param>
+    </route>
+
+    <route name="login" path="/login"/>
+</routes>

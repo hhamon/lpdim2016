@@ -8,11 +8,19 @@ class ServiceLocator implements ServiceLocatorInterface
     private $definitions;
     private $services;
 
-    public function __construct(array $parameters)
+    public function __construct(array $parameters = [])
     {
-        $this->parameters = $parameters;
         $this->definitions = [];
         $this->services = [];
+        $this->setParameters($parameters);
+    }
+
+    public function setParameters(array $parameters)
+    {
+        $this->parameters = [];
+        foreach ($parameters as $key => $value) {
+            $this->setParameter($key, $value);
+        }
     }
 
     public function setParameter($key, $value)
@@ -22,13 +30,13 @@ class ServiceLocator implements ServiceLocatorInterface
         }
 
         $this->parameters[$key] = $value;
-
+        
         return $this;
     }
 
     public function getParameter($key)
     {
-        if (!isset($this->parameters[$key])) {
+        if (!array_key_exists($key, $this->parameters)) {
             throw new \InvalidArgumentException(sprintf(
                 'No parameter found for key "%s".',
                 $key

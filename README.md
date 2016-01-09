@@ -12,6 +12,106 @@ en priorité sur l'apprentissage du langage PHP en mode orienté objet ainsi que
 sur des concepts plus fondamentaux tels que le Web, le protocole HTTP, la
 sécurité et l'architecture logicielle.
 
+Le Langage PHP
+--------------
+
+PHP est l'acronyme pour Hypertext Preprocessor. C'est un langage de
+programmation interprété développé initialement par Rasmus Lerdorf en 1995. À sa
+sortie, il s'appelait PHP/FI pour *Form Interpreter*. Rasmus avait développé PHP
+pour ses besoins personnels. Il souhaitait comptabiliser dynamiquement les
+visites sur son site et récupérer les données envoyées par des formulaires HTML
+afin de les traiter au niveau du serveur. PHP est aussi un langage de
+programmation multiplateformes. Il fonctionne notamment avec Windows, Mac OS,
+Linux. Enfin, PHP est un langage Open-Source (son code source est ouvert),
+gratuit et publié sous licence PHP. À ce jour, les statistiques estiment que
+près de 80% des sites Internet sont développés en PHP.
+
+PHP est développé sur la base du langage C. Les scripts sont interprété à
+l'exécution par le moteur PHP, le *Zend Engine*, et sont transformés à la volée
+en *opcode*. L'opcode est du code binaire machine similaire à l'assembleur. Il
+s'agit d'une liste d'instructions opérationnelles primitives.
+
+Plus d'informations sur l'[historique de PHP](http://php.net/manual/en/history.php.php).
+
+C'est en 1997 pour leur projet d'études universitaires que Andi Gutmans et Zeev
+Suraski décident de modifier le moteur PHP pour introduire un système
+d'extensions. C'est principalement cet atout qui a permis de populariser PHP
+notamment en favorisant le support de bases de données relationnelles telles que
+MySQL.
+
+À la fin de l'année 1998, une nouvelle version de PHP est publiée : PHP 4. C'est
+sans doute la version de PHP qui a connu le plus gros succès. Cette nouvelle
+mouture intègre un tout nouveau coeur réécrit *from scratch*. C'est aussi
+l'arrivée du moteur *Zend Engine* en Mai 2000. La version 4 de PHP est arrivée
+avec un nombre important de nouvelles fonctionnalités comme le support des
+sessions, la bufferisation de sortie et l'intégration avec d'autres serveurs
+web. C'est aussi dans PHP 4 que les premières implémentations des concepts de la
+programmation orientée objet ont fait leur apparition. Il était déjà possible de
+structurer le code avec des classes et des objets, ce qui a permis l'arrivée des
+premiers frameworks et bibliothèques de code tels que Creole DB, Smarty ou bien
+CakePHP.
+
+Ce n'est qu'en juin 2004 que PHP 5.0 voit le jour. Cette version intègre une
+nouvelle mouture du moteur interne, le *Zend Engine 2*. Ce moteur vient avec de
+bien meilleure performances et offre au langage PHP de nouvelles fonctionnalités
+(extension filter) dont notamment un support complet de la programmation
+orientée objet. PHP 5.0 et 5.1 viennent aussi avec des extensions orientées
+objet telles que PDO, SimpleXML, DOM et MySQLi. PHP 5.2 fera son apparition
+quelques années plus tard introduisant de nouvelles fonctionnalités et de
+meilleures performances.
+
+En 2005, une initiative est lancée par Andrei Zmievski pour développer PHP 6 en
+introduisant un support complet de l'Unicode. Malheureusement, les changements
+nécessaires au niveau du moteur et des extensions natives pour supporter
+l'Unicode se sont avérés bien trop importants et n'ont pas permis à PHP 6 de
+voir le jour. Le projet a été avorté quelques années plus tard.
+
+Après quelques années d'incertitude concernant les évolutions de PHP, la
+*Core Team* décide de travailler sur PHP 5.3. Cette nouvelle version voit le
+jour en juin 2009 et s'accompagne de nouvelles fonctionnalités comme les espaces
+de nommage (*namespaces*). PHP 5.4 est publié deux ans plus tard et fournit
+entre autres le support des *traits* comme nouveauté majeure. C'est aussi dans
+PHP 5.4 que les algorithmes de gestion de la mémoire et des variables ont été
+largement optimisés pour offrir de bien meilleure performances par rapport aux
+versions précédentes. Avec un cycle de publications de nouvelles versions
+réguliers, tous les deux ans en moyenne, les versions PHP 5.5 et 5.6 voient le
+jour avec leur lots de nouvelles fonctionnalités (générateurs, mot-clé
+*finally*, cache d'opcode natif, etc.).
+
+C'est à la fin de l'année 2015 que la nouvelle version majeure de PHP voit le
+jour. Il s'agit de PHP 7, anciennement appelée *PHPNG* (*New Generation*). Cette
+nouvelle mouture intègre un tout nouveau moteur PHP réécrit *from scratch* à
+l'initiative de Nikita Popov. PHP 7 est annoncée avec des performances deux fois
+supérieures en moyenne par rapport aux versions précédentes de PHP tout en
+garantissant une compatibilité rétrograde de la syntaxe. PHP 7 vient aussi avec
+tout un tas de nouvelles fonctionnalités dont le tant attendu *typage strict*.
+En parallèle, Facebook développe un fork similaire de PHP 7 appelé *HHVM*
+(*HipHop Virtual Machine*) qui compile du langage Hack (sorte de PHP) en code
+C++.
+
+Les développeurs et mainteneurs du coeur de PHP forment aujourd'hui une toute
+petite équipe d'une quinzaine de bénévoles tout au plus :
+
+* **Rasmus Lerdorf** : le créateur original de PHP,
+* **Zeev Suraski** : l'un des co-créateurs de PHP 3 et co-foundateur de la société Zend,
+* **Andi Gutmans** : l'un des co-créateurs de PHP 3 et co-foundateur de la société Zend,
+* **Pierre Joye** : développeur indépendant en charge du support de PHP sur les plateformes Microsoft Windows et Azure Cloud,
+* **Sara Golemon** : développeuse Hack/HHVM chez Facebook, contributrice à PHP,
+* **Anthony Ferrara** : contributeur à PHP,
+* **Julien Pauli** : contributeur à PHP, release manager de PHP 5.5 / 5.6,
+* **Derick Rethans** : contributeur historique à PHP, auteur de l'extension XDebug,
+* **Lukas Kawe Smith** : release manager de PHP 5.3,
+* **Nikita Popov** : core contributeur à PHP 7.0,
+* **Dmitry Stogov** : core contributeur à PHP,
+* **Sascha Schumann** : core contributeur à PHP,
+* **Anatol Belski** : core contributeur à PHP,
+* **Joe Watkins** : core contributeur à PHP,
+* **Ilia Alshanetsky** : core contributeur à PHP,
+* **Johannes Schlueter** : core contributeur à PHP, développeur chez Oracle,
+
+Et bien d'autres contributeurs historiques depuis les débuts du projet :
+[crédits](http://php.net/credits.php).
+
 Installation du projet
 ----------------------
 
@@ -46,7 +146,6 @@ parameters:
     database.dsn:      mysql:host=localhost;port=3306;dbname=lp_dim
     database.user:     root
     database.password: ~
-    monolog.log_file:  /Volumes/Development/Sites/Blog/logs/dev.log
 ```
 
 Le chemin vers le fichier de logs doit être absolu.
@@ -71,13 +170,15 @@ la racine du projet afin de savoir où se trouvent les fichiers de tests
 unitaires à exécuter. L'exécution de cette commande produit un résultat
 similaire à celui ci-dessous :
 
-    PHPUnit 5.1.3 by Sebastian Bergmann and contributors.
+    PHPUnit 5.0.10 by Sebastian Bergmann and contributors.
     
-    .....................................    37 / 37 (100%)
+    ...............................................................  63 / 136 ( 46%)
+    ............................................................... 126 / 136 ( 92%)
+    ..........                                                      136 / 136 (100%)
     
-    Time: 269 ms, Memory: 5.50Mb
+    Time: 2.52 seconds, Memory: 14.75Mb
     
-    OK (37 tests, 127 assertions)
+    OK (136 tests, 330 assertions)
 
 Enfin, il a été vu en cours que PHPUnit est aussi capable de générer des
 rapports de couverture de code aux formats HTML et Clover (XML). Il suffit pour
@@ -540,19 +641,53 @@ La classe `Kernel` constitue le coeur du « micro-framework » développé en TP
 C'est lui qui est responsable de traduire un objet de requête en un objet de
 réponse. Pour ce faire, il utilise la méthode `handle()` de l'interface
 `Framework\KernelInterface` et s'appuie sur son registre de services
-(*Service Locator*) passé à son constructeur.
+(*Service Locator*) passé à son constructeur. Cette méthode délègue ensuite à un
+service `http_kernel` de type `Framework\HttpKernel` qui lui aussi implémente
+l'interface `Framework\KernelInterface`.
 
-La méthode `doHandle()` de la classe `Framework\Kernel` tente de convertir la
-requête en réponse en invoquant un contrôleur. Avant de parvenir au contrôleur,
-le noyau doit d'abord demander au service routeur si l'url de la requête
-correspond à une route enregistrée. Si c'est le cas, les paramètres de la route
-sont stockés en tant qu'attributs de la requête avec la méthode `setAttributes()`
-de la requête. Puis, le noyau récupère le contrôleur à invoquer depuis la
-fabrique de contrôleurs. C'est cette dernière qui fabrique le contrôleur à partir
-des attributs de la requête. Il ne reste au noyau plus qu'à invoquer
-dynamiquement le contrôleur à l'aide de la fonction native PHP
-`call_user_func_array()`. Le contrôleur reçoit de la part du noyau la référence
-à la requête et retourne à ce dernier un objet de réponse.
+La méthode `handle()` de l'objet `HttpKernel` propage des événements de
+pré-traitement et de post-traitement de la requête grâce au service
+`event_manager` de type `Framework\EventManager\EventManager`. Ces événements
+rendent possible l'extension du noyau en certains points stratégiques du
+traitement de la requête sans changer l'algorithme de la méthode `handle()`.
+Celle-ci est d'ailleurs déclarée finale. Le fait d'utiliser un gestionnaire
+d'événements dans cette méthode finale pour étendre dynamiquement le noyau est
+une autre implémentation du patron de conception *Gabarit de Méthode*.
+
+**Note :** le composant `EventManager` est une implémentation du patron de
+conception *Médiateur* (aka *Mediator*), lui même inspiré du patron de
+conception *Observateur* (aka *Observer*). Le Médiateur est un patron de
+conception comportemental qui favorise le découplage entre des objets qui
+communiquent ensemble.
+
+La méthode `doHandleRequest()` de la classe `Framework\HttpKernel` tente de
+convertir l'objet de requête en objet de réponse en invoquant un contrôleur.
+Avant de parvenir au contrôleur, le noyau doit d'abord demander au service
+routeur si l'url de la requête correspond à une route enregistrée. Cette
+opération est réalisée par l'objet `Framework\RouterListener` qui écoute le tout
+premier événement propagé `Framework\KernelEvents::REQUEST`. Si le routeur
+parvient à faire correspondre la requête du client avec une route, alors les
+paramètres de celle-ci sont stockés dans la requête en tant qu'attributs pour
+un usage ultérieur. Si aucune route ne correspond à la requête, le routeur émet
+une exception qui est instantanénemt capturée et traitée par le noyau HTTP.
+
+Puis, le noyau HTTP récupère depuis la fabrique de contrôleurs, le contrôleur à
+invoquer. La fabrique le contrôleurs construit le contrôleur à partir du tableau
+d'attributs de la requête. Si celui-ci ne contient pas suffisamment d'éléments
+pour constuire le contrôleur, la fabrique lève alors une exception.
+
+Ensuite, le noyau HTTP propage un événement `Framework\KernelEvents::CONTROLLER`
+qui permet aux écouteurs de celui-ci de modifier le contrôleur juste avant qu'il
+soit invoqué.
+
+Il ne reste alors au noyau HTTP plus qu'à invoquer dynamiquement le contrôleur à
+l'aide de la fonction native PHP `call_user_func_array()`. Le contrôleur reçoit
+de la part du noyau la référence à la requête et retourne à ce dernier un objet
+de réponse. Si aucune réponse n'est retournée, le noyau HTTP lève une exception.
+
+Lorsque l'objet de réponse est retourné, le noyau HTTP propage un événement
+`Framework\KernelEvents::RESPONSE`. N'importe lequel des écouteurs qui écoutent
+cet événement peut modifier la réponse générée.
 
 Le noyau de l'application est utilisé comme une implémentation du patron
 d'architecture *Contrôleur Frontal* (aka *Front Controller*). Il s'agit du point
@@ -560,18 +695,29 @@ d'entrée unique sur l'application. C'est le fichier `web/index.php` qui démarr
 et utilise le noyau.
 
 ```php
-use Framework\Kernel;
+# web/index.php
+require_once __DIR__.'/../bootstrap.php';
+
 use Framework\Http\Request;
-use Framework\ServiceLocator\ServiceLocator;
+use Framework\Http\StreamableInterface;
+use Framework\Kernel;
 
-$request = Request::createFromGlobals();
+$serviceLocator = require __DIR__.'/../bootstrap.php';
 
-$kernel = new Kernel(new ServiceLocator());
-$response = $kernel->handle($request);
-$response->send();
+$kernel = new Kernel($serviceLocator);
+$response = $kernel->handle(Request::createFromGlobals());
+
+if ($response instanceof StreamableInterface) {
+    $response->send();
+}
 ```
 
-Pour plus d'informations, consultez les tests unitaires.
+Si une exception est levée au cours du workflow de traitement de la requête, le
+noyau HTTP l'attrape et propage un événement `Framework\KernelEvents::EXCEPTION`
+pour la traiter. Les écouteurs de cet événement peuvent enregistrer l'exception
+dans un journal d'erreur puis générer une vue adaptée à retourner au client. La
+classe `Application\ErrorHandler` génère les pages d'erreurs appropriées pour
+l'utilisateur final en fonction du type de l'exception à traiter.
 
 ### Le Composant `Templating`
 
@@ -683,6 +829,117 @@ bien encore conteneurs d'inversion de contrôle.
 
 Pour en savoir plus sur le *Registre de Services*, consultez les tests unitaires
 et le *Contrôleur Frontal*, le fichier `web/index.php`.
+
+### Le Composant `EventManager`
+
+Le composant `EventManager` fournit une implémentation du patron de conception
+*Médiateur*, lui même inspiré du patron *Observateur*. Son objectif consiste à
+découpler des objets qui possèdent de nombreuses connexions avec d'autres. La
+classe `Framework\EventManager\EventManager` joue ce rôle de médiateur.
+
+Les écouteurs configurés sont d'abord enregistrés sur le médiateur. Un écouteur
+n'est ni plus ni moins qu'une structure invoquable en PHP :
+
+* une chaîne de caractères contenant le nom d'une fonction PHP,
+* un objet qui implémente la méthode magique `__invoke()`,
+* un tableau contenant un objet et le nom d'une méthode publique à appeler sur
+  celui-ci,
+* un tableau contenant le nom d'une classe et le nom d'une méthode statique
+  publique de cette classe,
+* une fonction anonyme (`Closure`).
+
+Chaque écouteur écoute un événement. Plusieurs écouteurs peuvent être attachés
+sur le même événement et déclenchés avec des priorités différentes.
+
+```php
+use Framework\EventManager\EventManager;
+use Framework\ExceptionEvent;
+
+$eventManager = new EventManager();
+$eventManager->addEventListener('kernel.exception', function (ExceptionEvent $event) {
+    $exception = $event->getException();
+    $request = $event->getRequest();
+    // ...
+});
+$eventManager->addEventListener(
+    'kernel.exception',
+    function (ExceptionEvent $event) {
+        // ...
+    },
+    100 // Priorité
+});
+```
+
+Chaque écouteur écoute un événement, ici `kernel.exception`. Lorsqu'il sera
+déclenché plus tard, l'écouteur recevra en argument un objet d'événement qui
+encapsule certaines informations. Dans cet exemple, l'événement
+`kernel.exception` est en fait un objet de type `Framework\ExceptionEvent` qui
+encapsule des objets comme la requête et l'exception à traiter.
+
+Lorsque tous les écouteurs sont enregistrés sur le gestionnaire d'événements, ce
+dernier peut alors propager des événements depuis le code client qui le
+référence. Cela permet ainsi de découpler l'objet client de ses nombreux
+écouteurs.
+
+```php
+class HttpKernel implements KernelInterface
+{
+    private $dispatcher;
+
+    final public function handle(Request $request)
+    {
+        try {
+            $response = $this->doHandleRequest($request);
+        } catch (\Exception $exception) {
+            $event = $this->dispatcher->dispatch(KernelEvents::EXCEPTION, new ExceptionEvent($exception, $request));
+            if (!$event->hasResponse()) {
+                throw new \RuntimeException('No exception handler has generated a Response', 0, $exception);
+            }
+    
+            $response = $event->getResponse();
+        }
+  
+        return $this->doHandleResponse($request, $response);
+    }
+}
+```
+
+À l'appel de la fonction `dispatch()`, le répartiteur d'événements invoque
+successivement dans l'ordre de priorité les écouteurs de l'événement et transmet
+à chacun l'objet `$event`. Si un écouteur est capable de fixer un objet
+`Response` dans l'objet `ExceptionEvent` alors la propagation de l'événement est
+immédiatement stoppée et les écouteurs enregistrés restants ne sont pas appelés.
+
+```php
+namespace Framework\EventManager;
+
+class EventManager implements EventManagerInterface
+{
+    public function dispatch($name, Event $event)
+    {
+        if (!$this->hasListeners($name)) {
+            return $event;
+        }
+
+        foreach ($this->getSortedListeners($name) as $listener) {
+            call_user_func_array($listener, [ $event ]);
+            if ($event->isStopped()) {
+                // Stop looping if a listener
+                // has stopped the event propagation.
+                break;
+            }
+        }
+
+        return $event;
+    }
+
+    // ...
+}
+```
+
+Dans le mini-framework, la classe `Application\ErrorHandler` est enregistrée
+comme écouteur de l'événement `kernel.exception`. Le répartiteur d'événement est
+quant à lui enregistré comme service dans le registre de services.
 
 Application de Blogging suivant le patron MVC
 ---------------------------------------------
@@ -865,19 +1122,21 @@ de rendu offre une palette de fonctionnalités modernes telles que l'héritage d
 gabarits, l'échappement automatique des variables, les filtres de formattage ou
 bien encore les inclusions de vues.
 
-    {% extends "layout.twig" %}
-    
-    {% block title 'Mon Blog' %}
-    
-    {% block body %}
-        <h1>Bienvenue sur mon blog</h1>
-    
-        {% for post in posts %}
-            <h2>{{ post.title }}</h2>
-            {{ include('blog/details.twig') }}
-        {% endfor %}
-    
-    {% endblock %}
+```html+twig
+{% extends "layout.twig" %}
+
+{% block title 'Mon Blog' %}
+
+{% block body %}
+    <h1>Bienvenue sur mon blog</h1>
+
+    {% for post in posts %}
+        <h2>{{ post.title }}</h2>
+        {{ include('blog/details.twig') }}
+    {% endfor %}
+
+{% endblock %}
+```
 
 Le snippet de code Twig ci-dessus utilise l'héritage de gabarits (mot-clé
 `extends`), la boucle `for` et l'inclusion de gabarit (fonction `include()`). Il
@@ -1615,10 +1874,11 @@ le nouveau solde est mis à jour avant d'être retourné en sortie de la fonctio
 Le Principe SOLID
 -----------------
 
-En programmation informatique, SOLID est un acronyme représentant cinq principes
-de base pour la programmation orientée objet. Ces cinq principes sont censés
-apporter une ligne directrice permettant le développement de logiciels plus
-fiables, plus robustes, plus maintenables, plus extensibles et plus testables.
+En programmation informatique, **SOLID** est un acronyme représentant cinq
+principes de base pour la programmation orientée objet. Ces cinq principes sont
+censés apporter une ligne directrice permettant le développement de logiciels
+plus fiables, plus robustes, plus maintenables, plus extensibles et plus
+testables.
 
 * **S**ingle Responsability Principle ou « principe de responsabilité unique »
   qui stipule qu'une classe doit avoir une et une seule responsabilité. Si l'on
@@ -1845,8 +2105,8 @@ Les 23 patrons de conception sont réparis en trois familles :
 * Les patrons **Comportementaux** organisent la manière dont les objets
   collaborent les uns avec les autres. Ils sont chargés de mieux distribuer les
   responsabilités des objets et expliquent le fonctionnement de certains
-  algorithmes. Les patrons *Gabarit de Méthode*, *Itérateur* et *Stratégie* sont
-  trois exemples de patrons comportementaux.
+  algorithmes. Les patrons *Gabarit de Méthode*, *Itérateur*, *Médiateur* et
+  *Stratégie* sont trois exemples de patrons comportementaux.
 
 ### Le Patron Singleton
 
@@ -2022,6 +2282,27 @@ Dans le projet du mini-framework, la classe `RouteCollection` du composant
 `Routing` est un exemple d'implémentation du patron *Itérateur* en PHP grâce à
 l'interface native `Iterator` de PHP.
 
+### Le Patron Médiateur
+
+> Dans ce patron, il y a un objet qui définit comment plusieurs objets
+> communiquent entre eux en évitant à chacun de faire référence à ses
+> interlocuteurs. Ce patron est utilisé quand il y a un nombre non négligeable
+> de composants et de relations entre les composants. Par exemple dans un réseau
+> de cinq composants, il peut y avoir jusqu'à vingt relations (chaque composant
+> vers quatre autres). Un composant médiateur est placé au milieu du réseau et
+> le nombre de relations est diminué : chaque composant est relié uniquement au
+> médiateur. Le médiateur joue un rôle similaire à un sujet dans le patron
+> Observateur et sert d'intermédiaire pour assurer les communications entre les
+> objets.
+>
+> *Wikipédia*.
+
+Pour diminuer les couplages entre l'objet `HttpKernel` et ses collaborateurs, ce
+dernier utilise un médiateur. Il s'agit de l'objet `EventManager`qui propage des
+événements et notifie les écouteurs associés. Quand le noyau HTTP propage un
+signal dans le framework, des écouteurs se déclenchent successivement à son
+écoute, puis le traitent.
+
 Concepts abordés en cours
 -------------------------
 
@@ -2033,7 +2314,7 @@ et sur lesquels porteront l'évaluation écrite.
 | Standards         | Protocole HTTP, PHP PSR, PHP FIG                                                  |
 | P. Orientée Objet | classes, méthodes, interfaces, abstract, final, static, principe SOLID            |
 | Tests unitaires   | PHPUnit, TDD, Code Coverage                                                       |
-| Outils            | Composer, PHPUnit, Twig, Symfony, XDebug, Git                            |
+| Outils            | Composer, PHPUnit, Twig, Symfony, XDebug, Git                                     |
 | Design Patterns   | Template Method, Adapter, Factory Method, Composite, Strategy, Mediator, Observer |
 | Architecture      | MVC, Service Locator, Dependency Injection, Lazy Loading                          |
 | Base de données   | MySQL, Innodb, SQL, transaction, requêtes préparées                               |

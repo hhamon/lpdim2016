@@ -121,7 +121,7 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @throws \RuntimeException
      */
-    private function addHeader($name, $value)
+    public function addHeader($name, $value)
     { 
         if ($this->findHeader($name)) {
             throw new \RuntimeException(sprintf(

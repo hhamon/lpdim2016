@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\Framework;
+namespace Test\Framework;
 
 use Framework\ControllerFactory;
 

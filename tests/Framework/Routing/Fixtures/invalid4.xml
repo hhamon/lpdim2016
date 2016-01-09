@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<routes>
+    <route name="homepage" path="/{lang}" methods="GET">
+        <param key="_controller">Application\Controller\Blog\ListPostsAction</param>
+        <requirement>[a-z]{2}</requirement>
+    </route>
+</routes>

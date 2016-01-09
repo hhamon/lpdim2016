@@ -6,6 +6,23 @@ use Framework\Http\Request;
 
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @expectedException \Framework\Http\MalformedHttpHeaderException
+     */
+    public function testHeadersAreMalformed()
+    {
+        $message = <<<MESSAGE
+GET /home HTTP/1.1
+user-agent: Mozilla/Firefox
+content-type: application/json
+foo bar: http://wikipedia.com
+
+{ "foo": "bar" }
+MESSAGE;
+
+        Request::createFromMessage($message);
+    }
+
     public function testCreateFromMessage()
     {
         $message = <<<MESSAGE
@@ -22,6 +39,7 @@ MESSAGE;
         $this->assertInstanceOf(Request::class, $request);
         $this->assertSame($message, $request->getMessage());
         $this->assertSame($message, (string) $request);
+        $this->assertNull($request->getHeader('foo'));
     }
 
     public function testGetMessage()
@@ -200,6 +218,71 @@ MESSAGE;
             [ Request::TRACE,   '/contact'       ],
             [ Request::HEAD,    '/fr/article/42' ],
             [ Request::DELETE,  '/cgv'           ],
+        ];
+    }
+
+    public function testRequestAttributes()
+    {
+        $message = <<<MESSAGE
+GET /home HTTP/1.1
+
+MESSAGE;
+
+        $request = Request::createFromMessage($message);
+        $request->setAttributes(['foo' => 'bar']);
+        $request->setAttribute('hello', 'world');
+
+        $this->assertTrue($request->hasAttribute('hello'));
+        $this->assertSame('world', $request->getAttribute('hello'));
+        $this->assertTrue($request->hasAttribute('foo'));
+        $this->assertSame('bar', $request->getAttribute('foo'));
+        $this->assertFalse($request->hasAttribute('bar'));
+        $this->assertSame('qux', $request->getAttribute('bar', 'qux'));
+    }
+
+    /**
+     * @expectedException \Framework\Http\MalformedHttpMessageException
+     * @dataProvider provideInvalidMessage
+     */
+    public function testUnableToParseMesage($message)
+    {
+        Request::createFromMessage($message);
+    }
+
+    public function provideInvalidMessage()
+    {
+        return [
+            ['foooooo'],
+            [''],
+            [true],
+            [false],
+            [null],
+            [10],
+        ];
+    }
+
+    /**
+     * @dataProvider provideGlobalInformation
+     */
+    public function testCreateFromGlobals($path, $expectedPath)
+    {
+        $_SERVER['PATH_INFO'] = $path;
+        $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.1';
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+
+        $request = Request::createFromGlobals();
+
+        $this->assertSame($expectedPath, $request->getPath());
+        $this->assertSame('HTTP', $request->getScheme());
+        $this->assertSame('1.1', $request->getSchemeVersion());
+        $this->assertSame('POST', $request->getMethod());
+    }
+
+    public function provideGlobalInformation()
+    {
+        return [
+            ['', '/'],
+            ['/home', '/home'],
         ];
     }
 }

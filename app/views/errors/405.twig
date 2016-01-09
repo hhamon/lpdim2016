@@ -1,0 +1,14 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Method Not Allowed{% endblock %}
+
+{% block body %}
+    <p>
+        HTTP method "{{ request.method }}" is not allowed!
+    </p>
+
+    {% if debug %}
+        {{ include('errors/exception.twig') }}
+    {% endif %}
+
+{% endblock %}

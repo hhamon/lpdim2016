@@ -86,9 +86,19 @@ class Request extends AbstractMessage implements RequestInterface, AttributeHold
     public static function createFromGlobals()
     {
         $protocol = explode('/', $_SERVER['SERVER_PROTOCOL']);
-        $path = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/';
+        $path = !empty($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/';
 
         return new self($_SERVER['REQUEST_METHOD'], $path, $protocol[0], $protocol[1]);
+    }
+
+    public static function create($method, $path, array $headers = [], $body = '')
+    {
+        $protocol = static::HTTP.'/'.static::VERSION_1_1;
+        if (isset($_SERVER['SERVER_PROTOCOL'])) {
+            $protocol = explode('/', $_SERVER['SERVER_PROTOCOL']);
+        }
+
+        return new self($method, $path, $protocol[0], $protocol[1], $headers, $body);
     }
 
     public function getMethod()

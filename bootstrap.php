@@ -2,8 +2,14 @@
 
 require_once __DIR__.'/vendor/autoload.php';
 
+use Application\ErrorHandler;
 use Application\Repository\BlogPostRepository;
 use Framework\ControllerFactory;
+use Framework\ControllerListener;
+use Framework\EventManager\EventManager;
+use Framework\HttpKernel;
+use Framework\KernelEvents;
+use Framework\RouterListener;
 use Framework\Routing\Router;
 use Framework\Routing\Loader\CompositeFileLoader;
 use Framework\Routing\Loader\PhpFileLoader;
@@ -15,6 +21,7 @@ use Symfony\Component\Yaml\Yaml;
 $settings = Yaml::parse(file_get_contents(__DIR__.'/app/config/settings.yml'));
 
 $dic = new ServiceLocator($settings['parameters']);
+
 $dic->setParameter('database.options', [
     \PDO::ATTR_AUTOCOMMIT => false,
     \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
@@ -59,8 +66,27 @@ $dic->register('router', function (ServiceLocator $dic) {
     return new Router($dic->getParameter('router.file'), $loader);
 });
 
-$dic->register('controller_factory', function () {
-    return new ControllerFactory();
+$dic->register('error_handler', function (ServiceLocator $dic) {
+    return new ErrorHandler(
+        $dic->getService('renderer'),
+        $dic->getParameter('app.environment'),
+        $dic->getParameter('app.debug')
+    );
+});
+
+$dic->register('event_manager', function (ServiceLocator $dic) {
+    $manager = new EventManager();
+    $manager->addEventListener(KernelEvents::REQUEST, [ new RouterListener($dic->getService('router')), 'onKernelRequest' ]);
+    $manager->addEventListener(KernelEvents::CONTROLLER, [ new ControllerListener($dic), 'onKernelController' ]);
+    $manager->addEventListener(KernelEvents::EXCEPTION, [ $dic->getService('error_handler'), 'onKernelException' ]);
+    return $manager;
+});
+
+$dic->register('http_kernel', function (ServiceLocator $dic) {
+    return new HttpKernel(
+        $dic->getService('event_manager'),
+        new ControllerFactory()
+    );
 });
 
 return $dic;

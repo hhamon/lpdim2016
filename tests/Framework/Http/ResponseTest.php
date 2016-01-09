@@ -31,4 +31,45 @@ MESSAGE;
         $this->assertSame($message, $response->getMessage());
         $this->assertSame($message, (string) $response);
     }
+
+    /**
+     * @expectedException \Framework\Http\MalformedHttpMessageException
+     * @dataProvider provideInvalidMessage
+     */
+    public function testUnableToParseMesage($message)
+    {
+        Response::createFromMessage($message);
+    }
+
+    public function provideInvalidMessage()
+    {
+        return [
+            ['foooooo'],
+            [''],
+            [true],
+            [false],
+            [null],
+            [10],
+        ];
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @dataProvider provideInvalidStatusCode
+     */
+    public function testInvalidResponseStatusCode($statusCode)
+    {
+        new Response($statusCode, 'HTTP','1.1');
+    }
+
+    public function provideInvalidStatusCode()
+    {
+        return [
+            [ 0 ],
+            [ 10 ],
+            [ 99 ],
+            [ 600 ],
+            [ 1000 ],
+        ];
+    }
 }

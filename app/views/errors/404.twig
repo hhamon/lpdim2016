@@ -1,7 +1,5 @@
 {% extends 'layout.twig' %}
 
-{% set mode = 'dev' %}
-
 {% block title %}Page Not Found{% endblock %}
 
 {% block body %}
@@ -9,14 +7,8 @@
         The URL "{{ request.path }}" does not exist!
     </p>
 
-    {% if 'dev' == mode %}
-        <h2>Exception</h2>
-        <p>
-            {{ exception.message }}
-        </p>
-        <pre>
-            {{- exception.traceAsString -}}
-        </pre>
+    {% if debug %}
+        {{ include('errors/exception.twig') }}
     {% endif %}
 
 {% endblock %}

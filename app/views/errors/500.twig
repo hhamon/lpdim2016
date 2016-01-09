@@ -1,0 +1,14 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Internal Server Error{% endblock %}
+
+{% block body %}
+    <p>
+        Internal Server Error
+    </p>
+
+    {% if debug %}
+        {{ include('errors/exception.twig') }}
+    {% endif %}
+
+{% endblock %}

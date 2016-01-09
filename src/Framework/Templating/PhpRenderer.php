@@ -19,7 +19,7 @@ class PhpRenderer extends AbstractRenderer
     {
         $path = $this->getTemplatePath($view);
 
-        if (in_array('view', $vars)) {
+        if (array_key_exists('view', $vars)) {
             throw new \RuntimeException('The "view" template variable is a reserved keyword.');
         }
 

@@ -2,16 +2,16 @@
 
 namespace Framework;
 
-use Framework\Http\RequestInterface;
-use Framework\Http\ResponseInterface;
+use Framework\Http\Request;
+use Framework\Http\Response;
 
 interface KernelInterface
 {
     /**
      * Converts a Request object into a Response object.
      *
-     * @param RequestInterface $request
-     * @return ResponseInterface
+     * @param Request $request
+     * @return Response
      */
-    public function handle(RequestInterface $request);
+    public function handle(Request $request);
 }

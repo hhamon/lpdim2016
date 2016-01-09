@@ -2,14 +2,8 @@
 
 namespace Framework;
 
-use Framework\Http\AttributeHolderInterface;
-use Framework\Http\HttpNotFoundException;
-use Framework\Http\RequestInterface;
+use Framework\Http\Request;
 use Framework\Http\Response;
-use Framework\Http\ResponseInterface;
-use Framework\Routing\MethodNotAllowedException;
-use Framework\Routing\RequestContext;
-use Framework\Routing\RouteNotFoundException;
 use Framework\ServiceLocator\ServiceLocatorInterface;
 
 class Kernel implements KernelInterface
@@ -29,54 +23,11 @@ class Kernel implements KernelInterface
     /**
      * Converts a Request object into a Response object.
      *
-     * @param RequestInterface $request
-     * @return ResponseInterface
+     * @param Request $request
+     * @return Response
      */
-    final public function handle(RequestInterface $request)
+    final public function handle(Request $request)
     {
-        try {
-            return $this->doHandle($request);
-        } catch (RouteNotFoundException $e) {
-            return $this->getService('renderer')->renderResponse('errors/404.twig', [ 'request' => $request, 'exception' => $e ], Response::HTTP_NOT_FOUND);
-        } catch (HttpNotFoundException $e) {
-            return $this->getService('renderer')->renderResponse('errors/404.twig', [ 'request' => $request, 'exception' => $e ], Response::HTTP_NOT_FOUND);
-        } catch (MethodNotAllowedException $e) {
-            return $this->createResponse($request, 'Method Not Allowed', Response::HTTP_METHOD_NOT_ALLOWED);
-        } catch (\Exception $e) {
-            //echo $e->getMessage();die;
-            return $this->createResponse($request, 'Internal Server Error', Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    private function doHandle(RequestInterface $request)
-    {
-        $router = $this->getService('router');
-        $factory = $this->getService('controller_factory');
-
-        $context = RequestContext::createFromRequest($request);
-        $params = $router->match($context);
-
-        if ($request instanceof AttributeHolderInterface) {
-            $request->setAttributes($params);
-        }
-
-        $action = $factory->createController($params);
-
-        if ($action instanceof AbstractAction) {
-            $action->setServiceLocator($this->dic);
-        }
-
-        $response = call_user_func_array($action, [ $request ]);
-
-        if (!$response instanceof ResponseInterface) {
-            throw new \RuntimeException('A controller must return a Response object.');
-        }
-
-        return $response;
-    }
-
-    private function createResponse(RequestInterface $request, $content, $statusCode = ResponseInterface::HTTP_OK)
-    {
-        return Response::createFromRequest($request, $content, $statusCode);
+        return $this->getService('http_kernel')->handle($request);
     }
 }

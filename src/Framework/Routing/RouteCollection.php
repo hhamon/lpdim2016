@@ -23,10 +23,16 @@ class RouteCollection implements \Iterator, \Countable
                 return $name;
             }
         }
+
+        throw new \RuntimeException('Route is not registered in the collection.');
     }
 
     public function merge(RouteCollection $routes, $override = false)
     {
+        if ($routes === $this) {
+            throw new \LogicException('A routes collection cannot merge into itself.');
+        }
+
         foreach ($routes as $name => $route) {
             $this->add($name, $route, $override);
         }

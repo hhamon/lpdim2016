@@ -27,14 +27,14 @@ class Response extends AbstractMessage implements ResponseInterface, StreamableI
         503 => 'Service Unavailable',
     ];
 
-    public function __construct($statusCode, $scheme, $schemeVersion, array $headers, $body)
+    public function __construct($statusCode, $scheme, $schemeVersion, array $headers = [], $body = '')
     {
         parent::__construct($scheme, $schemeVersion, $headers, $body);
 
         $this->setStatusCode($statusCode);
     }
 
-    public static function createFromRequest(MessageInterface $request, $content, $statusCode, $headers = [])
+    public static function createFromRequest(MessageInterface $request, $content, $statusCode = Response::HTTP_OK, $headers = [])
     {
         return new self($statusCode, $request->getScheme(), $request->getSchemeVersion(), $headers, $content);
     }
@@ -94,6 +94,9 @@ class Response extends AbstractMessage implements ResponseInterface, StreamableI
         return $matches;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function send()
     {
         header($this->createPrologue());
