@@ -227,6 +227,47 @@ d'autochargement si nécessaire. Elle s'accompagne aussi d'une option `--optimiz
 qui optimise le processus d'autochargement. Cette option est particulièrement
 utile sur un serveur de production.
 
+PSR & FIG
+---------
+
+L'acronyme *PSR* signifie *PHP Standard Recommendation* ou littéralement
+*Recommandation Standard PHP* en français. Une *PSR* est en fait une règle
+standard et universelle de codage définie par le *PHP FIG* afin que les
+frameworks et bibliothèques de code moderne soient interopérables. Il existe
+aujourd'hui plusieurs standards *PSR* édités par le *FIG*.
+
+*FIG* est l'acronyme pour *Framework Interoperability Group*. Il s'agit d'un
+groupe de développeurs PHP fondé à la fin de l'année 2009 à la suite de la
+conférence annuelle ZendCon. Les principaux développeurs des frameworks et
+bibliothèque PHP tels que Symfony, Zend, CakePHP, Doctrine, Twig, Drupal, etc.
+qui étaient présents à cette conférence ont eu l'idée de se rassembler et mettre
+en commun leur savoir pour définir des règles d'interopérabilité du code.
+L'objectif était ainsi de pouvoir plus facilement utiliser le code d'un
+framework dans un autre compétiteur sans trop d'efforts.
+
+Depuis le début de l'année 2010, plusieurs règles *PSR* ont vu le jour pour
+standardiser entre autres les mécaniques d'autochargement des classes ou bien
+les styles et conventions de codage. Le tableau ci-dessous dresse la liste des
+PSRs actuellement validés ou bien en cours de travail.
+
+| PSR    | Statut   | Explications
+|--------|----------+------------------------------------------------------------------------------------------|
+| PSR-0  | Obsolète | Mécanismes standards d'autochargement des classes.                                       |
+| PSR-1  | Acceptée | Conventions et styles de codage obligatoires.                                            |
+| PSR-2  | Acceptée | Conventions et styles de codage facultatifs.                                             |
+| PSR-3  | Acceptée | Interface commune pour développer des implémentations d'objet « logger ».                |
+| PSR-4  | Acceptée | Amélioration de PSR-0 et dépréciation des classes préfixées.                             |
+| PSR-5  | En cours | Standards de documentation API du code pour les outils comme phpDocumentor.              |
+| PSR-6  | Acceptée | Interface commune pour développer des bibliothèques d'adatateurs d'outils de cache.      |
+| PSR-7  | Acceptée | Interface commune pour modéliser des messages HTTP (requêtes et réponses).               |
+| PSR-8  | En cours | (Easter Egg) Interface commune pour envoyer des câlins (hugs) à la communauté PHP.       |
+| PSR-9  | En cours | Format standard pour reporter des failles de sécurité dans un logiciel.                  |
+| PSR-10 | En cours | Processus de communication standard des failles de sécurité d'un logiciel.               |
+| PSR-11 | En cours | Interface commune pour définir des conteneurs d'injection de dépendances interopérables. |
+| PSR-12 | En cours | Évolution de PSR-2 qui prend en compte les nouvelles règles syntaxique de PHP 7.         |
+
+Cette liste est disponible sur le site du [PHP-FIG](http://www.php-fig.org/).
+
 Conception du Framework
 -----------------------
 
