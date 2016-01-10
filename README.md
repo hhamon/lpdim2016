@@ -1658,6 +1658,136 @@ fiables, plus robustes, plus maintenables, plus extensibles et plus testables.
   préférable de typer des arguments avec des types abstraits (classes concrètes
   ou interfaces) plutôt que des types concrets (classes concrètes).
 
+Objets de Valeur
+----------------
+
+Un « Objet de Valeur » (ou *Value Object* en anglais) est une instance qui
+encapsule un certain nombre d'attributs et dont l'état globale représente une
+valeur. Les objets de valeur répondent aussi aux trois règles suivantes :
+
+1. L'état interne d'un objet de valeur ne possède pas d'identité propre. En
+   d'autres termes, l'objet de valeur ne contient pas d'identifiant unique qui
+   le distingue d'un autre objet de valeur représentant la même valeur.
+2. L'état interne d'un objet de valeur n'est plus modifiable une fois que
+   l'objet a été construit. Cette propriété lui confère une capacité de cache
+   pour une durée infinie. L'état de l'objet est garanti d'être toujours le
+   même.
+3. Deux objets de valeur contenant chacun la même valeur (donc le même état)
+   sont permutables et utilisables indifféremment l'un de l'autre.
+
+De nombreux concepts du quotidien sont propices à une modélisation sous la forme
+d'objets de valeur :
+
+* Une valeur monétaire,
+* Une date dans le calendrier,
+* Un poids,
+* Une masse,
+* Un élément chimique de la table périodique des éléments,
+* Une molécule,
+* Un point dans un plan à deux dimensions,
+* Un point dans un plan à trois dimensions,
+* Une adresse postale,
+* Des coordonnées GPS,
+* Une couleur RVB,
+* Une couleur CMJN,
+* etc.
+
+La classe ci-dessous représente un point dans un plan à deux dimensions.
+
+```php
+class Point
+{
+    private $x;
+    private $y;
+
+    public function __construct($x, $y)
+    {
+        if (!is_int($x)) {
+            throw new \InvalidArgumentException('$x must be a valid integer.');
+        }
+
+        if (!is_int($y)) {
+            throw new \InvalidArgumentException('$y must be a valid integer.');
+        }
+
+        $this->x = $x;
+        $this->y = $y;
+    }
+
+    public static function fromString($coordinates)
+    {
+        if (!is_string($coordinates)) {
+            throw new \InvalidArgumentException('$coordinates must be a valid string that represents coordinates: (x,y)');
+        }
+
+        if (!preg_match('#^\((?P<x>-?\d+),(?P<y>-?\d+)\)$#', $coordinates, $point)) {
+            throw new \InvalidArgumentException('Invalid 2D coordinates representation.');
+        }
+
+        return new self((int) $point['x'], (int) $point['y']);
+    }
+
+    public function getX()
+    {
+        return $this->x;
+    }
+
+    public function getY()
+    {
+        return $this->y;
+    }
+
+    public function translate($a, $b)
+    {
+        return new self($this->x + $a, $this->y + $b);
+    }
+
+    public function negate()
+    {
+        return new self(-$this->x, -$this->y);
+    }
+}
+```
+
+La classe `Point` ci-dessous encapsule les coordonnées cartésiennes d'un point
+dans un plan à deux dimensions (abscisse et ordonnée). Le constructeur vérifie
+que les coordonnées respectent certaines contraintes. Pour des raisons de
+simplicité, les coordonnées doivent être exprimées uniquement en entiers
+(positifs ou négatifs). Il existe aussi un constructeur statique qui offre un
+moyen alternatif de construire l'objet à partir d'une représentation en chaîne
+du duo de coordonnées.
+
+```php
+$a = Point::fromString('(0,0)');
+$b = Point::fromString('(1,2)');
+$c = Point::fromString('(-1,-6)');
+$d = Point::fromString('(-4,12)');
+```
+
+Comme il s'agit d'objets de valeur, aucun d'entre eux n'a d'identité propre.
+Deux objets renfermant le même état sont donc égaux et permutables.
+
+```php
+$a = Point::fromString('(0,0)');
+$b = Point::fromString('(0,0)');
+
+var_dump($a == $b); // true
+```
+
+De plus, il est impossible de changer les coordonnées d'un point une fois que
+celui-ci a été construit par le constructeur. Par conséquent, les méthodes de
+manipulation des points (négation, translation, rotation, etc.) retournent
+toutes de nouvelles instances de points.
+
+```php
+$a = Point::fromString('(1,2)');
+$b = $a->negate();
+$c = $a->translate(2, 3);
+```
+
+Dans un système informatique, les objets de valeur offrent ainsi un moyen simple
+et puissant de manipuler et tester unitairement des données atomiques.
+
 Patrons de Conception
 ---------------------
 
