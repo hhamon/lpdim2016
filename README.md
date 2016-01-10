@@ -1662,8 +1662,9 @@ Objets de Valeur
 ----------------
 
 Un « Objet de Valeur » (ou *Value Object* en anglais) est une instance qui
-encapsule un certain nombre d'attributs et dont l'état globale représente une
-valeur. Les objets de valeur répondent aussi aux trois règles suivantes :
+encapsule un certain nombre d'attributs et dont l'état global représente une
+seule et unique valeur. Les objets de valeur répondent aussi aux trois règles
+suivantes :
 
 1. L'état interne d'un objet de valeur ne possède pas d'identité propre. En
    d'autres termes, l'objet de valeur ne contient pas d'identifiant unique qui
