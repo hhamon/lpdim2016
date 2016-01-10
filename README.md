@@ -947,10 +947,7 @@ class ServiceLocator implements ServiceLocatorInterface
             ));
         }
 
-        $this->services[$name] = $service = call_user_func_array(
-            $this->definitions[$name],
-            [ $this ]
-        );
+        $this->services[$name] = $service = call_user_func_array($this->definitions[$name], [$this]);
 
         return $service;
     }
