@@ -531,7 +531,7 @@ PSRs actuellement validés ou bien en cours de travail.
 | PSR-9  | En cours | Format standard pour reporter des failles de sécurité dans un logiciel.                  |
 | PSR-10 | En cours | Processus de communication standard des failles de sécurité d'un logiciel.               |
 | PSR-11 | En cours | Interface commune pour définir des conteneurs d'injection de dépendances interopérables. |
-| PSR-12 | En cours | Évolution de PSR-2 qui prend en compte les nouvelles règles syntaxique de PHP 7.         |
+| PSR-12 | En cours | Évolution de PSR-2 qui prend en compte les nouvelles règles syntaxiques de PHP 7.        |
 
 Cette liste est disponible sur le site du [PHP-FIG](http://www.php-fig.org/).
 
