@@ -3,6 +3,7 @@
 require_once __DIR__.'/vendor/autoload.php';
 
 use Application\ErrorHandler;
+use Application\LoggerHandler;
 use Application\Repository\BlogPostRepository;
 use Framework\ControllerFactory;
 use Framework\ControllerListener;
@@ -16,6 +17,8 @@ use Framework\Routing\Loader\PhpFileLoader;
 use Framework\Routing\Loader\XmlFileLoader;
 use Framework\ServiceLocator\ServiceLocator;
 use Framework\Templating\TwigRendererAdapter;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Symfony\Component\Yaml\Yaml;
 
 $settings = Yaml::parse(file_get_contents(__DIR__.'/app/config/settings.yml'));
@@ -33,6 +36,7 @@ $dic->setParameter('twig.options', [
     'cache' => __DIR__.'/../app/cache/twig',
     'debug' => true,
 ]);
+$dic->setParameter('logger.log_file', __DIR__.'/app/cache/app.log');
 
 $dic->register('repository.blog_post', function (ServiceLocator $dic) {
     return new BlogPostRepository($dic->getService('database'));
@@ -74,11 +78,22 @@ $dic->register('error_handler', function (ServiceLocator $dic) {
     );
 });
 
+$dic->register('logger', function (ServiceLocator $dic) {
+    $level = $dic->getParameter('app.debug') ? Logger::WARNING : Logger::CRITICAL;
+
+    $logger = new Logger('blog');
+    $logger->pushHandler(new StreamHandler($dic->getParameter('logger.log_file'), $level));
+
+    return $logger;
+});
+
 $dic->register('event_manager', function (ServiceLocator $dic) {
     $manager = new EventManager();
     $manager->addEventListener(KernelEvents::REQUEST, [ new RouterListener($dic->getService('router')), 'onKernelRequest' ]);
     $manager->addEventListener(KernelEvents::CONTROLLER, [ new ControllerListener($dic), 'onKernelController' ]);
+    $manager->addEventListener(KernelEvents::EXCEPTION, [ new LoggerHandler($dic->getService('logger')), 'onKernelException' ]);
     $manager->addEventListener(KernelEvents::EXCEPTION, [ $dic->getService('error_handler'), 'onKernelException' ]);
+
     return $manager;
 });
 
