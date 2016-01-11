@@ -423,9 +423,9 @@ situé à la racine du projet.
 ```
 
 Chaque paquet possède un nom du type `organisation/paquet` auquel est associée
-une expression de version. Le symbole *tilde* - `~ - signifie *à partir de* mais
-il exclue cependant les versions majeures. Le symbole `^` est identique à `~`
-mais il inclut aussi les versions majeures. Par conséquent, Composer ira
+une expression de version. Le symbole *tilde* - `~` - signifie *à partir de*
+mais il exclut cependant les versions majeures. Le symbole `^` est identique à
+`~` mais il inclut aussi les versions majeures. Par conséquent, Composer ira
 chercher pour chaque paquet la version la plus à jour à partir de celle indiquée
 dans le fichier `composer.json`. Il est aussi possible d'exprimer les versions à
 l'aide d'une valeur fixe (`3.0.1`), d'un intervalle (`>=2.5-dev,<2.6-dev`),
