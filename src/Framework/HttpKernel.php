@@ -29,7 +29,7 @@ class HttpKernel implements KernelInterface
         return $this->doHandleResponse($request, $response);
     }
 
-    private function doHandleException(Request $request, \Exception $exception = null)
+    private function doHandleException(Request $request, \Exception $exception)
     {
         $event = $this->dispatch(KernelEvents::EXCEPTION, new ExceptionEvent($exception, $request));
         if (!$event->hasResponse()) {
