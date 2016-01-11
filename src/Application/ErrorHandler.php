@@ -49,7 +49,7 @@ class ErrorHandler
             return;
         }
 
-        $event->setResponse($this->render('error/500.twig', $vars));
+        $event->setResponse($this->render('errors/500.twig', $vars));
     }
 
     private function render($view, array $vars, $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR)
