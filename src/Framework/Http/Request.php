@@ -93,7 +93,7 @@ class Request extends AbstractMessage implements RequestInterface, AttributeHold
 
     public static function create($method, $path, array $headers = [], $body = '')
     {
-        $protocol = static::HTTP.'/'.static::VERSION_1_1;
+        $protocol = [ static::HTTP, static::VERSION_1_1 ];
         if (isset($_SERVER['SERVER_PROTOCOL'])) {
             $protocol = explode('/', $_SERVER['SERVER_PROTOCOL']);
         }
