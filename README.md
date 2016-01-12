@@ -2399,7 +2399,8 @@ seul et unique objet.
 
 > Un proxy est une classe qui se substitue à une autre classe. Par convention et
 > simplicité, le proxy implémente la même interface que la classe à laquelle il
-> se substitue. L'utilisation de ce proxy ajoute une indirection à l'utilisation > de la classe à substituer.
+> se substitue. L'utilisation de ce proxy ajoute une indirection à l'utilisation
+> de la classe à substituer.
 >
 > *Wikipédia*.
 
