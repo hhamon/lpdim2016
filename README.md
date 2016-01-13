@@ -1487,6 +1487,8 @@ facultatif.
 ```php
 namespace Application;
 
+use Framework\Http\Response;
+use Framework\Routing\Exception\RouteNotFoundException;
 use Framework\Templating\ResponseRendererInterface;
 use Psr\Log\LoggerInterface;
 
@@ -1508,10 +1510,7 @@ class ErrorHandler
             $this->logger->critical($exception->getMessage());
         }
 
-        $vars = [
-            'exception' => $exception,
-        ];
-
+        $vars = ['exception' => $exception];
         if ($exception instanceof RouteNotFoundException) {
             return $this->render('errors/404.twig', $vars, Response::HTTP_NOT_FOUND));
         }
@@ -1552,7 +1551,8 @@ L'interface `LoggerInteface` est ici une implémentation du patron « Stratégie
 Il est donc maintenant aisé de proposer différentes implémentations de celle-ci
 selon l'environnement d'exécution de l'application. En environnement de
 développement, une véritable implémentation de journal d'erreurs sera injectée
-tandis que dans un mode de production, il s'agira de passer un objet « logger » null tel que celui présenté ci-après.
+tandis que dans un mode de production, il s'agira de passer un objet « logger »
+null tel que celui présenté ci-après.
 
 ```php
 namepace Framework\Logger;
@@ -1578,7 +1578,7 @@ Grâce au patron « *Null Object* », le code s'utilise de la manière suivante 
 
 ```php
 
-$twig = new \Twig_Environment(\new \Twig_Loader_Filesystem(__DIR__.'/views'));
+$twig = new \Twig_Environment(new \Twig_Loader_Filesystem(__DIR__.'/views'));
 $renderer = new TwigRendererAdapter($twig);
 
 // Development mode with a real logger
