@@ -30,7 +30,7 @@ abstract class AbstractAction
         return $this->dic->getService($name);
     }
 
-    protected function render($view, array $vars)
+    protected function render($view, array $vars = [])
     {
         return $this->getService('renderer')->renderResponse($view, $vars);
     }
