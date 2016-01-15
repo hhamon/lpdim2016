@@ -6,6 +6,77 @@ use Framework\Http\Request;
 
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
+    public function testGetMethod()
+    {
+        $_SERVER['PATH_INFO'] = '/';
+        $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.1';
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_GET['page'] = '2';
+        $_POST['foo'] = 'bar';
+        $_COOKIE['name'] = 'thomas';
+
+        $request = Request::createFromGlobals();
+        $request->setAttribute('route', 'homepage');
+
+        $this->assertSame('homepage', $request->get('route'));
+        $this->assertSame('2', $request->get('page'));
+        $this->assertSame('bar', $request->get('foo'));
+        $this->assertSame('thomas', $request->get('name'));
+        $this->assertSame('none', $request->get('null', 'none'));
+        $this->assertNull($request->get('hello'));
+    }
+
+    public function testGetCookieParameter()
+    {
+        $_SERVER['PATH_INFO'] = '/';
+        $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.1';
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_GET[] = $_COOKIE = $_POST = [];
+        $_COOKIE['name'] = 'hugo';
+
+        $request = Request::createFromGlobals();
+
+        $this->assertSame('hugo', $request->getCookie('name'));
+        $this->assertNull($request->getCookie('foobar'));
+        $this->assertSame('john', $request->getCookie('foobar', 'john'));
+        $this->assertSame('hugo', $request->get('name'));
+        $this->assertSame('john', $request->get('foobar', 'john'));
+    }
+
+    public function testGetRequestParameter()
+    {
+        $_SERVER['PATH_INFO'] = '/';
+        $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.1';
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_GET[] = $_COOKIE = $_POST = [];
+        $_POST['title'] = 'My Title';
+
+        $request = Request::createFromGlobals();
+
+        $this->assertSame('My Title', $request->getRequestParameter('title'));
+        $this->assertNull($request->getQueryParameter('foobar'));
+        $this->assertSame('Your Title', $request->getRequestParameter('foobar', 'Your Title'));
+        $this->assertSame('My Title', $request->get('title'));
+        $this->assertSame('Your Title', $request->get('foobar', 'Your Title'));
+    }
+
+    public function testGetQueryStringParameter()
+    {
+        $_SERVER['PATH_INFO'] = '/';
+        $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.1';
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_GET[] = $_COOKIE = $_POST = [];
+        $_GET['page'] = '2';
+
+        $request = Request::createFromGlobals();
+
+        $this->assertSame('2', $request->getQueryParameter('page'));
+        $this->assertNull($request->getQueryParameter('toto'));
+        $this->assertSame(1, $request->getQueryParameter('toto', 1));
+        $this->assertSame('2', $request->get('page'));
+        $this->assertSame(1, $request->get('toto', 1));
+    }
+
     /**
      * @expectedException \Framework\Http\MalformedHttpHeaderException
      */

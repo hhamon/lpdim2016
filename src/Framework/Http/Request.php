@@ -7,6 +7,9 @@ class Request extends AbstractMessage implements RequestInterface, AttributeHold
     private $method;
     private $path;
     private $attributes;
+    private $queryParameters;
+    private $requestParameters;
+    private $cookieParameters;
 
     /**
      * Constructor.
@@ -25,6 +28,9 @@ class Request extends AbstractMessage implements RequestInterface, AttributeHold
         $this->attributes = [];
         $this->setMethod($method);
         $this->path = $path;
+        $this->requestParameters = [];
+        $this->cookieParameters = [];
+        $this->queryParameters = [];
     }
 
     private function setMethod($method)
@@ -88,7 +94,21 @@ class Request extends AbstractMessage implements RequestInterface, AttributeHold
         $protocol = explode('/', $_SERVER['SERVER_PROTOCOL']);
         $path = !empty($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/';
 
-        return new self($_SERVER['REQUEST_METHOD'], $path, $protocol[0], $protocol[1]);
+        $request = new self($_SERVER['REQUEST_METHOD'], $path, $protocol[0], $protocol[1]);
+
+        if (isset($_GET)) {
+            $request->queryParameters = $_GET;
+        }
+
+        if (isset($_POST)) {
+            $request->requestParameters = $_POST;
+        }
+
+        if (isset($_COOKIE)) {
+            $request->cookieParameters = $_COOKIE;
+        }
+
+        return $request;
     }
 
     public static function create($method, $path, array $headers = [], $body = '')
@@ -99,6 +119,47 @@ class Request extends AbstractMessage implements RequestInterface, AttributeHold
         }
 
         return new self($method, $path, $protocol[0], $protocol[1], $headers, $body);
+    }
+
+    public function getQueryParameter($name, $default = null)
+    {
+        return isset($this->queryParameters[$name]) ? $this->queryParameters[$name] : $default;
+    }
+
+    public function getRequestParameter($name, $default = null)
+    {
+        return isset($this->requestParameters[$name]) ? $this->requestParameters[$name] : $default;
+    }
+
+    public function hasCookie($name)
+    {
+        return !empty($this->cookieParameters[$name]);
+    }
+
+    public function getCookie($name, $default = null)
+    {
+        return $this->hasCookie($name) ? $this->cookieParameters[$name] : $default;
+    }
+
+    public function get($name, $default = null)
+    {
+        if (null !== $value = $this->getAttribute($name)) {
+            return $value;
+        }
+
+        if (null !== $value = $this->getQueryParameter($name)) {
+            return $value;
+        }
+
+        if (null !== $value = $this->getRequestParameter($name)) {
+            return $value;
+        }
+
+        if (null !== $value = $this->getCookie($name)) {
+            return $value;
+        }
+
+        return $default;
     }
 
     public function getMethod()
