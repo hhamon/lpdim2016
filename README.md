@@ -1173,7 +1173,7 @@ Dans l'exemple ci-dessus, la méthode `__invoke()` de la classe
 `Application\Controller\Blog\GetPostAction` a pour tâche de retrouver un billet
 du blog par son identifiant unique. Pour ce faire, l'action analyse d'abord la
 requête afin de récupérer l'identifiant unique du billet dans ses attributs.
-L'attribut `id` est en fait un paramètre dynamique de la route `blog_post`.`Ce
+L'attribut `id` est en fait un paramètre dynamique de la route `blog_post`.Ce
 paramètre doit forcément être un ou plusieurs chiffres qui se suivent comme le
 décrit le marqueur `<requirement/>` du fichier de configuration des routes
 (`app/config/routes.xml`).
