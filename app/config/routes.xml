@@ -4,6 +4,14 @@
         <param key="_controller">Application\Controller\Blog\ListPostsAction</param>
     </route>
 
+    <route name="login" path="/login" methods="GET|POST">
+        <param key="_controller">Application\Controller\LoginAction</param>
+    </route>
+
+    <route name="dashboard" path="/dashboard" methods="GET">
+        <param key="_controller">Application\Controller\DashboardAction</param>
+    </route>
+
     <route name="blog" path="/blog" methods="GET">
         <param key="_controller">Application\Controller\Blog\ListPostsAction</param>
     </route>
