@@ -3,13 +3,13 @@
 namespace Framework;
 
 use Framework\Routing\RequestContext;
-use Framework\Routing\RouterInterface;
+use Framework\Routing\UrlMatcherInterface;
 
 class RouterListener
 {
     private $router;
 
-    public function __construct(RouterInterface $router)
+    public function __construct(UrlMatcherInterface $router)
     {
         $this->router = $router;
     }

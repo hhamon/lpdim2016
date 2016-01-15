@@ -4,7 +4,7 @@ namespace Framework\Routing;
 
 use Framework\Routing\Loader\FileLoaderInterface;
 
-class Router implements RouterInterface
+class Router implements UrlMatcherInterface
 {
     private $routes;
     private $loader;
