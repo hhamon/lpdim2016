@@ -5,4 +5,6 @@
 /coverage
 !/app/cache/.gitkeep
 /app/cache
+!/app/sessions/.gitkeep
+/app/sessions
 /app/config/settings.yml

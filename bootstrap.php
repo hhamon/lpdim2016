@@ -16,6 +16,8 @@ use Framework\Routing\Loader\CompositeFileLoader;
 use Framework\Routing\Loader\PhpFileLoader;
 use Framework\Routing\Loader\XmlFileLoader;
 use Framework\ServiceLocator\ServiceLocator;
+use Framework\Session\Driver\NativeDriver;
+use Framework\Session\Session;
 use Framework\Templating\TwigRendererAdapter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -37,6 +39,10 @@ $dic->setParameter('twig.options', [
     'debug' => true,
 ]);
 $dic->setParameter('logger.log_file', __DIR__.'/app/cache/app.log');
+$dic->setParameter('session.options', [
+    'session.name' => 'lpdim2016',
+    'session.save_path' => __DIR__.'/app/sessions',
+]);
 
 $dic->register('repository.blog_post', function (ServiceLocator $dic) {
     return new BlogPostRepository($dic->getService('database'));
@@ -76,6 +82,10 @@ $dic->register('error_handler', function (ServiceLocator $dic) {
         $dic->getParameter('app.environment'),
         $dic->getParameter('app.debug')
     );
+});
+
+$dic->register('session', function (ServiceLocator $dic) {
+    return new Session(new NativeDriver(), $dic->getParameter('session.options'));
 });
 
 $dic->register('logger', function (ServiceLocator $dic) {

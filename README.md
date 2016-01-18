@@ -1121,6 +1121,94 @@ Dans l'application de blog, des instances des classes `ErrorHandler` et
 comme écouteurs de l'événement `kernel.exception`. Le répartiteur d'événements
 est quant à lui enregistré comme service dans le registre de services.
 
+### Le Composant `Session`
+
+Le composant `Session` fournit une fine couche d'abstraction par dessus le
+mécanisme de session de base de PHP. Grâce à cette abstraction, il est désormais
+plus facile d'adapter le stockage des données de la session utilisateur dans
+différentes technologies : système de fichier, Redis, Memcached, APC, etc.
+
+La classe `Framework\Session\Session` agit comme une sorte de façade et offre
+une API simplifiée pour manipuler la session. Cette classe implémente le contrat
+de l'interface `Framework\Session\SessionInterface` qui définit des méthodes
+publiques pour démarrer la session, la détruire, stocker des valeurs à
+l'intérieur ou bien récupérer ces dernières.
+
+```php
+namespace Framework\Session;
+
+interface SessionInterface
+{
+    /**
+     * Starts the session.
+     *
+     * @return bool True if the session is already started, false otherwise
+     */
+    public function start();
+
+    /**
+     * Destroys the session.
+     *
+     * @return bool True if the session was correctly destroyed, false otherwise.
+     */
+    public function destroy();
+
+    /**
+     * Stores new data into the session.
+     *
+     * @param string $key   The session variable name
+     * @param mixed  $value The session variable value (must be serializable at some point)
+     *
+     * @return bool True if succeeded, false otherwise.
+     */
+    public function store($key, $value);
+
+    /**
+     * Fetches a data from the session.
+     *
+     * @param string $key     The session variable name
+     * @param mixed  $default The default value to return
+     *
+     * @return mixed|null
+     */
+    public function fetch($key, $default = null);
+
+    /**
+     * Returns the session's unique identifier.
+     *
+     * @return string
+     */
+    public function getId();
+
+    /**
+     * Saves the session data to the persistent storage.
+     *
+     * @return bool True if successful, false otherwise
+     */
+    public function save();
+}
+```
+Pour implémenter complètement ce contrat, la classe `Session` dépend d'un
+adaptateur de système de stockage. Il s'agit d'un objet qui répond au contrat de
+l'interface `Framework\Session\Driver\DriverInterface`. Cette définit les
+méthodes publiques qui permettent de manipuler le système de stockage des
+données et offrir une abstraction des fonctions natives de PHP de manipulation
+des fichiers, de bases de données ou bien de cache clé/valeur comme Redis, APCu
+ou Memcached.
+
+Le composant vient avec deux implémentations par défaut de cette interface. La
+première est la classe `ArrayDriver`. Son usage est uniquement réservé aux tests
+unitaires puisque cet objet simule une session non persistente dans un tableau
+de données. C'est la raison pour laquelle sa documentation d'API utilise le
+marqueur `@internal` pour signifier son usage strictement interne. La seconde
+implémentation de la `DriverInterface` est la classe `NativeDriver`. Il s'agit
+d'une classe qui encapsule les appels au système natif de gestion des sessions
+de PHP.
+
+> Dans l'application du blog suivant le principe MVC, la classe `Session` est
+> définie dans le registre de services comme un service configuré avec son
+> adaptateur natif.
+
 Application de Blog suivant le patron MVC
 -----------------------------------------
 
