@@ -1,0 +1,30 @@
+homepage:
+  path: /
+  default: { _controller: "Application\\Controller\\Blog\\ListPostsAction" }
+  methods: GET
+
+login:
+  path: /login
+  default: { _controller: "Application\\Controller\\LoginAction" }
+  methods: GET|POST
+
+dashboard:
+  path: /dashboard
+  default: { _controller: "Application\\Controller\\DashboardAction" }
+  methods: GET
+
+blog:
+  path: /blog
+  default: { _controller: "Application\\Controller\\Blog\\ListPostsAction" }
+  methods: GET
+
+blog_post:
+  path: /blog/article-{id}.html
+  default: { _controller: "Application\\Controller\\Blog\\GetPostAction"}
+  requirements: {'id' : '\d+'}
+  methods: GET
+
+hello:
+  path: /hello
+  default: { _controller: "Application\\Controller\\HelloWorldAction" }
+

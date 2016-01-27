@@ -1,0 +1,5 @@
+path: /hello
+default: { _controller: "Application\\Controller\\HelloWorldAction" }
+
+path: /hello
+default: { _controller: "Application\\Controller\\HelloWorldAction" }
