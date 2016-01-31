@@ -11,6 +11,7 @@ use Framework\EventManager\EventManager;
 use Framework\HttpKernel;
 use Framework\KernelEvents;
 use Framework\RouterListener;
+use Framework\Routing\Loader\JsonFileLoader;
 use Framework\Routing\Loader\YamlFileLoader;
 use Framework\Routing\Router;
 use Framework\Routing\Loader\CompositeFileLoader;
@@ -33,7 +34,8 @@ $dic->setParameter('database.options', [
     \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
     \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'",
 ]);
-$dic->setParameter('router.file', __DIR__.'/app/config/routes.yml');
+//$dic->setParameter('router.file', __DIR__.'/app/config/routes.yml');
+$dic->setParameter('router.file', __DIR__.'/app/config/routes.json');
 $dic->setParameter('app.views_dir', __DIR__.'/app/views');
 $dic->setParameter('twig.options', [
     'cache' => __DIR__.'/../app/cache/twig',
@@ -74,6 +76,7 @@ $dic->register('router', function (ServiceLocator $dic) {
     $loader->add(new PhpFileLoader());
     $loader->add(new XmlFileLoader());
     $loader->add(new YamlFileLoader());
+    $loader->add(new JsonFileLoader());
 
     return new Router($dic->getParameter('router.file'), $loader);
 });
