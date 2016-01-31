@@ -1,0 +1,4 @@
+homepage:
+    path: /home
+    defaults: { _controller: "Application\\Controller\\HomePageAction" }
+    methods: [ GET, POST ]
