@@ -13,10 +13,18 @@ class GetPostAction extends AbstractAction
         $repository = $this->getService('repository.blog_post');
 
         $id = $request->getAttribute('id');
+
+        if(!is_numeric($id))
+        {
+            throw new \HttpRuntimeException(
+                sprintf('Bad request, id article should be a number and not %s', $request->getAttribute('id')
+                ));
+        }
+
         if (!$post = $repository->find($id)) {
             throw new HttpNotFoundException(sprintf('No blog post found for id #%u.', $id));
         }
 
-        return $this->render('blog/show.twig', [ 'post' => $post ]);
+        return $this->render('blog/show.twig', [ 'post' => $post, 'linkPosts' => '/blog' ]);
     }
 }

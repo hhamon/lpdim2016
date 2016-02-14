@@ -1,0 +1,55 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Create new post{{ post.method }}{% endblock %}
+
+{% block body %}
+    <form action="{{ post.action }}" method="post">
+        <div class="row ">
+            <div class="form-group col-md-4">
+                <label class="control-label" for="title">Title :</label>
+                <input class="form-control" type="text" value="{{ post.title }}" name="title" id="title"/>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-4">
+                <label class="control-label" for="content">Content:</label>
+                <textarea class="form-control" name="content" id="content">{{ post.content }}</textarea>
+            </div>
+        </div>
+
+
+            <div class='row'>
+                <div class="form-group col-md-4">
+                    <label class="control-label" for="published_at">Published at :</label>
+                    <div class='input-group date' id='datetimepicker1'>
+                        <input type='text' name="published_at" value="{{ post.published_at }}" class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                    </div>
+                </div>
+            </div>
+
+        <div>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+
+        {% for error in errors %}
+            <p style="color : red"> {{ error }}</p>
+        {% endfor %}
+
+    <a href="/blog">Back to article</a>
+
+    {% block javascripts %}
+        {{ parent() }}
+        <script>
+            $("#datetimepicker1").datetimepicker({
+                format:"dddd, MMMM Do YYYY, HH:mm:ss"
+            });
+        </script>
+
+    {% endblock %}
+{% endblock %}
+
