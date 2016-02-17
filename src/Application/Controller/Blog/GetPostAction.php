@@ -24,6 +24,7 @@ class GetPostAction extends AbstractAction
         if (!$post = $repository->find($id)) {
             throw new HttpNotFoundException(sprintf('No blog post found for id #%u.', $id));
         }
+        //print_r($post);
 
         return $this->render('blog/show.twig', [ 'post' => $post, 'linkPosts' => '/blog' ]);
     }

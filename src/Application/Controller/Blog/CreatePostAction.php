@@ -9,16 +9,19 @@
 namespace Application\Controller\Blog;
 
 
+use Application\Repository\Model\BlogPost;
 use Framework\AbstractAction;
 use Framework\Http\Request;
 
 class CreatePostAction extends AbstractAction
 {
 
-    private $title;
-    private $content;
-    private $published_at;
+    private $blogPost;
     private $errors;
+    private $title;
+    private $contentMarkdown;
+    private $published_at;
+
 
 
 
@@ -29,24 +32,24 @@ class CreatePostAction extends AbstractAction
             return $this->saveNewBlogPost($request);
         }
 
-        return $this->showBlogPostCreator($request);
+        return $this->showBlogPostCreator();
 
     }
 
     //GET /blog/new
-    private function showBlogPostCreator(Request $request)
+    private function showBlogPostCreator()
     {
         $renderParams = [
             'post' =>
                 [
                     'action' => '/blog/new',
                     'title' => $this->title,
-                    'content' => $this->content,
+                    'contentMarkdown' => $this->contentMarkdown,
                     'published_at' => $this->published_at,
                 ],
             'errors' => $this->errors
         ];
-        return $this->render('blog/newBlogPost.twig', $renderParams);
+        return $this->render('blog/formBlogPost.twig', $renderParams);
 
     }
 
@@ -55,28 +58,30 @@ class CreatePostAction extends AbstractAction
     private function saveNewBlogPost(Request $request)
     {
 
-        if(!$this->postDataIsValid($request)){
-            return $this->showBlogPostCreator($request);
+        if(!$postData = $this->postDataIsValid($request)){
+            return $this->showBlogPostCreator();
         }
 
         $repository = $this->getService('repository.blog_post');
 
-        if (!$query = $repository->createBlogPosts($this->title, $this->content, $this->published_at)) {
+        $blogPost = BlogPost::parseToBlogPostObject($postData);
+
+        if (!$query = $repository->createBlogPost($blogPost)) {
             throw new \RuntimeException(sprintf('error during article creation with values :  %s  - %s - %s',
-                $this->title,
-                $this->content,
-                $this->published_at)
-            );
+                $blogPost->getTitle(),
+                $blogPost->getContentMarkdown(),
+                $blogPost->getPublishedAt()
+            ));
         };
 
         $dateNow = new \DateTime();
-        $articleDate = new \DateTime($this->published_at);
+        $articleDate = new \DateTime($blogPost->getPublishedAt());
 
         if($dateNow<$articleDate){
             return $this->redirect('/blog');
         }
 
-        return $this->redirect(sprintf('/blog/article-%d', (int) $repository->getLastPostId()));
+        return $this->redirect(sprintf('/blog/article-%d', (int) $blogPost->getId()));
 
     }
 
@@ -88,7 +93,7 @@ class CreatePostAction extends AbstractAction
             $this->errors[] = 'The title is empty, please fill-in for create post.';
         }
 
-        if (empty($this->content = $request->getRequestParameter('content'))) {
+        if (empty($this->contentMarkdown = $request->getRequestParameter('contentMarkdown'))) {
             $this->errors[] = 'The content is empty, please fill-in for create post.';
         }
 
@@ -99,7 +104,11 @@ class CreatePostAction extends AbstractAction
         if (count($this->errors) > 0) {
             return false;
         }
-        return true;
+        return [
+            'title' => $request->getRequestParameter('title'),
+            'contentMarkdown' => $request->getRequestParameter('contentMarkdown'),
+            'published_at' => $request->getRequestParameter('published_at')
+        ];
     }
 
 

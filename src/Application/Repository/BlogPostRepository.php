@@ -1,12 +1,20 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: leosauvaget
+ * Date: 17/02/2016
+ * Time: 20:03
+ */
 
 namespace Application\Repository;
+
+
+use Application\Repository\Model\BlogPost;
+use Application\Repository\Model\BlogPostCollection;
 
 class BlogPostRepository
 {
     private $dbh;
-    private $lastPostId;
-    private $lastLastPostId;
 
     public function __construct(\PDO $dbh)
     {
@@ -24,12 +32,12 @@ SQL;
         $stmt->bindParam('id', $pk, \PDO::PARAM_INT);
         $stmt->execute();
 
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
+        return BlogPost::parseToBlogPostObject($stmt->fetch(\PDO::FETCH_ASSOC));
     }
 
     public function getMostRecentPosts($limit)
     {
-        $limit = (int) $limit;
+        $limit = (int)$limit;
 
         $query = <<<SQL
 SELECT * FROM blog_post
@@ -38,70 +46,73 @@ ORDER BY published_at DESC
 LIMIT {$limit};
 SQL;
 
-        return $this->fetchAll($query);
+        return BlogPostCollection::createBlogCollectionFromArray($this->fetchAll($query));
     }
 
 
-public function findAnyPost($pk)
+    public function updateBlogPost(BlogPost $blogPost)
     {
-        $query = <<<SQL
-SELECT * FROM blog_post
-WHERE id = :id
-SQL;
-
-        $stmt = $this->dbh->prepare($query);
-        $stmt->bindParam('id', $pk, \PDO::PARAM_INT);
-        $stmt->execute();
-
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
-    }
-
-    public function createBlogPosts($title, $content, $date=null)
-    {
-
         $this->dbh->beginTransaction();
 
         $sql = <<<SQL
-INSERT INTO blog_post (`title`, `content`, published_at)
-VALUES  (:title, :content, :published_at)
+UPDATE blog_post
+set title = :title,
+  contentMarkdown = :contentMarkdown,
+  contentHTML = :contentHTML,
+  published_at = :published_at
+where id = :id
 SQL;
 
-        $date = $date ? date("Y-m-d H:i:s", strtotime($date)) : date("Y-m-d H:i:s");
+
+        $blogPostKeys = $blogPost->getAllKeys();
 
         $stmt = $this->dbh->prepare($sql);
-        $stmt->bindParam('title', $title, \PDO::PARAM_STR);
-        $stmt->bindParam('content', $content, \PDO::PARAM_STR);
-        $stmt->bindParam('published_at', $date, \PDO::PARAM_STR);
+        $stmt->bindParam('id', $blogPostKeys['id'], \PDO::PARAM_INT);
+        $stmt->bindParam('title', $blogPostKeys['title'], \PDO::PARAM_STR);
+        $stmt->bindParam('contentMarkdown', $blogPostKeys['contentMarkdown'], \PDO::PARAM_STR);
+        $stmt->bindParam('contentHTML', $blogPostKeys['contentHTML'], \PDO::PARAM_STR);
+        $stmt->bindParam('published_at', $blogPostKeys['published_at'], \PDO::PARAM_STR);
 
         $stmt->execute();
 
-        $this->setLastPostId();
-
-        try{
+        try {
             return $this->dbh->commit();
-        }catch(\PDOException $e){
+        } catch (\PDOException $e) {
             $this->dbh->rollBack();
-            $this->resetPostId();
-            //TODO Changing exception to custom exeption
             throw new \RuntimeException(sprintf('Error pending sql request, no changing effective. See : %s', $e->getMessage()));
         }
     }
 
 
+    public function createBlogPost(BlogPost $blogPost)
+    {
+        $this->dbh->beginTransaction();
 
-    public function getLastPostId(){
-        return $this->lastPostId;
+        $sql = <<<SQL
+INSERT INTO blog_post (`title`, `contentMarkdown`, `contentHTML`, published_at)
+VALUES  (:title, :contentMarkdown, :contentHTML, :published_at)
+SQL;
+
+        $stmt = $this->dbh->prepare($sql);
+        $blogPostKeys = $blogPost->getAllKeys();
+
+        $stmt->bindParam('title', $blogPostKeys['title'], \PDO::PARAM_STR);
+        $stmt->bindParam('contentMarkdown', $blogPostKeys['contentMarkdown'], \PDO::PARAM_STR);
+        $stmt->bindParam('contentHTML', $blogPostKeys['contentHTML'], \PDO::PARAM_STR);
+        $stmt->bindParam('published_at', $blogPostKeys['published_at'], \PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        $blogPost->setId($this->dbh->lastInsertId());
+
+        try {
+            return $this->dbh->commit();
+        } catch (\PDOException $e) {
+            $this->dbh->rollBack();
+            $blogPost->setId(null);
+            throw new \RuntimeException(sprintf('Error pending sql request, no changing effective. See : %s', $e->getMessage()));
+        }
     }
-
-    private function setLastPostId(){
-        $this->lastLastPostId = $this->lastPostId;
-        $this->lastPostId = $this->dbh->lastInsertId();
-    }
-
-    private function resetPostId(){
-        $this->lastPostId = $this->lastLastPostId;
-    }
-
 
 
     private function fetchAll($sql)

@@ -3,7 +3,7 @@
 {% block title %}Blog{% endblock %}
 
 {% block body %}
-    <a href="/blog/new">Create New post</a>
+    <a href="/blog/new" class="btn-default btn btn-success">Create New post</a>
     {% for post in posts %}
         {{ include('blog/postResume.twig') }}
     {% endfor %}

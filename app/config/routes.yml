@@ -24,6 +24,10 @@ create_post:
   methods: GET|POST
 
 
+update_post:
+  path: /blog/article-{id}/update
+  default: { _controller: "Application\\Controller\\Blog\\UpdatePostAction" }
+  methods: GET|POST
 
 
 blog_post:
