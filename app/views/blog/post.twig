@@ -1,4 +1,4 @@
-<h2>{{ post.title|title }}</h2>
+<a href="/index.php/blog/edit/{{ post.id }}" title="edition"><h2>{{ post.title|title }}</h2></a>
 <h3>Published on {{ post.published_at|date('d/m/Y H:i') }}.</h3>
 <p>
     {{ post.content|nl2br }}

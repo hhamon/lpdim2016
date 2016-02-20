@@ -18,6 +18,7 @@ use Framework\Routing\Loader\CompositeFileLoader;
 use Framework\Routing\Loader\PhpFileLoader;
 use Framework\Routing\Loader\XmlFileLoader;
 use Framework\ServiceLocator\ServiceLocator;
+use Framework\Session\Driver\ArrayDriver;
 use Framework\Session\Driver\NativeDriver;
 use Framework\Session\Session;
 use Framework\Templating\TwigRendererAdapter;
@@ -35,13 +36,17 @@ $dic->setParameter('database.options', [
     \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'",
 ]);
 //$dic->setParameter('router.file', __DIR__.'/app/config/routes.yml');
-$dic->setParameter('router.file', __DIR__.'/app/config/routes.json');
+$dic->setParameter('router.file', __DIR__.'/app/config/routes.xml');
 $dic->setParameter('app.views_dir', __DIR__.'/app/views');
 $dic->setParameter('twig.options', [
     'cache' => __DIR__.'/../app/cache/twig',
     'debug' => true,
 ]);
 $dic->setParameter('logger.log_file', __DIR__.'/app/cache/app.log');
+$dic->setParameter('session_blog_post.options',
+    ['session.name' => 'blog_post']
+);
+
 $dic->setParameter('session.options', [
     'session.name' => 'lpdim2016',
     'session.save_path' => __DIR__.'/app/sessions',
@@ -87,6 +92,11 @@ $dic->register('error_handler', function (ServiceLocator $dic) {
         $dic->getParameter('app.environment'),
         $dic->getParameter('app.debug')
     );
+});
+
+$dic->register('session_blog_post',function(ServiceLocator $dic){
+    $session = new Session(new ArrayDriver(), $dic->getParameter('session_blog_post.options'), true);
+    return $session;
 });
 
 $dic->register('session', function (ServiceLocator $dic) {

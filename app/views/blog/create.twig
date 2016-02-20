@@ -1,0 +1,18 @@
+{% extends 'layout.twig' %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+{% endblock %}
+{% block title %}Création de Blog Post{% endblock %}
+{% set error = session.fetch('error') %}
+{% block body %}
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    {{ html.form('post')|raw }}
+    {{ html.inputLabel('Titre','text','title',title)|raw }}
+    {{ html.textareaLabel('Contenu','content',content)|raw }}
+    {{ html.form_end('Enregistrer')|raw }}
+
+    <a href="/index.php/blog">Retour à la liste</a>
+{% endblock %}

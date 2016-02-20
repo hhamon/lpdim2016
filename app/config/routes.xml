@@ -24,4 +24,13 @@
     <route name="hello" path="/hello" methods="GET">
         <param key="_controller">Application\Controller\HelloWorldAction</param>
     </route>
+
+    <route name="create_post" path="/blog/create" methods="GET|POST">
+        <param key="_controller">Application\Controller\Blog\CreatePostAction</param>
+    </route>
+
+    <route name="edit_post" path="/blog/edit/{id}" methods="GET|POST">
+        <param key="_controller">Application\Controller\Blog\EditPostAction</param>
+        <requirement key="id">\d+</requirement>
+    </route>
 </routes>
