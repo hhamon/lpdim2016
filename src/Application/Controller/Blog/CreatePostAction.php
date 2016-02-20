@@ -40,9 +40,11 @@ class CreatePostAction extends AbstractAction
                 return $this->render('blog/create.twig',$args);
             }
             $repository = $this->getService('repository.blog_post');
+            $html = addslashes(Markdown::defaultTransform($content));
             if($id = $repository->create([
                 'title' => $title,
-                'content' => $content
+                'content' => $html,
+                'content_markdown' => $content
             ])){
                 return $this->redirect(
                     "/index.php/blog/article-{$id}.html"

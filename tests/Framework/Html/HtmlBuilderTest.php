@@ -48,6 +48,11 @@ class HtmlBuilderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function stripSlashes($text)
+    {
+        return stripslashes($text);
+    }
+
     public function  testInputLabel()
     {
         $builder = new HtmlBuilder();

@@ -42,11 +42,12 @@ SQL;
     public function edit($pk,array $args = [])
     {
         $query = <<<SQL
-UPDATE blog_post SET title=:title, content=:content WHERE id=:id
+UPDATE blog_post SET title=:title, content=:content, content_markdown=:content_markdown WHERE id=:id
 SQL;
         $this->dbh->beginTransaction();
         $stmt = $this->dbh->prepare($query);
         $args = array_merge(['id'=>$pk],$args);
+
         try{
             $stmt->execute($args);
         }catch(\PDOException $e){
@@ -63,9 +64,9 @@ SQL;
     public function create(array $args = [])
     {
         $query = <<<SQL
-INSERT into blog_post (title,content,published_at)
+INSERT into blog_post (title,content,content_markdown,published_at)
 VALUES
-(:title,:content,NOW());
+(:title,:content,:content_markdown,NOW());
 SQL;
         $this->dbh->beginTransaction();
         $stmt = $this->dbh->prepare($query);
