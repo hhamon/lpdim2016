@@ -1,0 +1,14 @@
+# app/config/routes.yml
+
+home:
+    path: /
+    defaults: { _controller: "Application\\Controller\\Blog\\ListPostsAction" }
+    methods: [ GET, POST ]
+homepage:
+    path: /homepage
+    defaults: { _controller: "Application\\Controller\\Blog\\ListPostsAction" }
+    methods: [ GET, POST ]
+hello:
+    path: /hello
+    defaults: { _controller: "Application\\Controller\\HelloWorldAction" }
+    methods: [ GET, POST ]

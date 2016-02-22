@@ -49,6 +49,7 @@ class TwigRendererAdapterTest extends \PHPUnit_Framework_TestCase
 <p>
     Hello Hugo!
 </p>
+
 OUTPUT;
 
         return $message;
