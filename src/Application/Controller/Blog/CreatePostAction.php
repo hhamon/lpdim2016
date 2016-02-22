@@ -20,7 +20,7 @@ class CreatePostAction extends AbstractAction
         $args = [];
         $args['html'] = new HtmlBuilder();
         $session = $this->getService('session_blog_post');
-
+        //check the method
         if($request->getMethod() == "POST"){
             $title = $request->getRequestParameter('title',false);
             $content = $request->getRequestParameter('content',false);

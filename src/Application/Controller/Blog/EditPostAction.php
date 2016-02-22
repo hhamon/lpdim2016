@@ -22,9 +22,11 @@ class EditPostAction extends AbstractAction
         $id = $request->getAttribute('id');
         $repository = $this->getService('repository.blog_post');
         $blog_post = $repository->find($id);
+        //verifying if the method is post
         if($request->getMethod() == "POST"){
             $args['html'] = $html;
             $args['blog_post'] = $blog_post;
+            //getting posted fields
             $title = $request->getRequestParameter('title',false);
             $content = $request->getRequestParameter('content',false);
             $args['session'] = $session;
@@ -42,6 +44,7 @@ class EditPostAction extends AbstractAction
                 $args['content'] = $content;
                 return $this->render('blog/edit.twig',$args);
             }
+            //transform markdown in html
             $html = addslashes(Markdown::defaultTransform($content));
             $repository = $this->getService('repository.blog_post');
             if($repository->edit($id,[
