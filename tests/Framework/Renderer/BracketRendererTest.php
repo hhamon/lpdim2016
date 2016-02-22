@@ -41,11 +41,12 @@ class BracketRendererTest extends \PHPUnit_Framework_TestCase
 
     private function getExpectedOutput()
     {
-        $message = <<<OUTPUT
+       $message = <<<OUTPUT
 <p>
     Hello Hugo!
 </p>
 OUTPUT;
+
 
         return $message;
     }
