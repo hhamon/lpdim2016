@@ -1,4 +1,5 @@
-<h2>{{ post.title|title }}</h2>
+<h2>{{ post.title|title }} - <a href="blog/edit/article-{{ post.id }}.html">Edit</a>
+</h2>
 <h3>Published on {{ post.published_at|date('d/m/Y H:i') }}.</h3>
 <p>
     {{ post.content|nl2br }}

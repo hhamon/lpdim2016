@@ -1,0 +1,16 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Blog - New BlogPost{% endblock %}
+
+{% block body %}
+
+    <h2>{{ error }}</h2>
+
+    <form method="POST">
+        <input type="text" name="title" id="title" />
+        <br /><textarea name="content" id="content"></textarea>
+        <button type="submit">Save</button>
+    </form>
+
+
+{% endblock %}

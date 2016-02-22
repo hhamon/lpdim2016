@@ -1,4 +1,4 @@
 homepage:
-    path: /
+    path: /home
     defaults: { _controller: "Application\\Controller\\Blog\\ListPostsAction" }
     methods: [ GET, POST ]
