@@ -1,7 +1,7 @@
 <a href="/blog/article-{{ post.id }}">
     <h2>{{ post.title|title | truncate(15, true) }}</h2>
 </a>
-<p>Published on {{ post.published_at|date('d/m/Y H:i') }}.</p>
+<p class="lead">Published on {{ post.published_at|date('d/m/Y H:i') }}.</p>
 
 {{ post.contentHTML | truncate(30, true) |raw }}
 

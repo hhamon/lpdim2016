@@ -17,6 +17,11 @@ class ControllerFactory implements ControllerFactoryInterface
         }
 
         $class = $params['_controller'];
+
+
+        $class = $this->reformatControllerPath($class);
+
+
         if (!class_exists($class)) {
             throw new \RuntimeException(sprintf('Controller class "%s" does not exist or cannot be autoloaded.', $class));
         }
@@ -27,5 +32,35 @@ class ControllerFactory implements ControllerFactoryInterface
         }
 
         return $action;
+    }
+
+
+    /**
+     * @param $class
+     * @return mixed|string
+     */
+    private function reformatControllerPath($class)
+    {
+
+        if(preg_match('#^Application\x5cController(.+)Action$#', $class)){
+            return $class;
+        }
+
+
+        if (!preg_match("/Action$/", $class)) {
+            $class = $class . "Action";
+        }
+
+        if (preg_match("/App:/", $class)) {
+            $class = preg_replace("/^App:/", "Application:", $class);
+            $class = preg_replace("/:/", "\\", $class);
+        }
+
+        if (!preg_match("/Controller/", $class)) {
+            $class = preg_replace("/Application/", "Application\\Controller", $class);
+            return $class;
+        }
+
+        return $class;
     }
 }
