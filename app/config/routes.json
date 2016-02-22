@@ -1,0 +1,11 @@
+{
+  "routes": {
+    "hello": {
+      "path": "/hello",
+      "defaults": {
+        "_controller": "Application\\Controller\\Blog\\HelloWorldAction"
+      },
+      "methods": [ "GET", "POST" ]
+    }
+  }
+}
