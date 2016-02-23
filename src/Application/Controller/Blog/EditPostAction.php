@@ -15,8 +15,14 @@ use Michelf\Markdown;
 
 class EditPostAction extends AbstractAction
 {
+    /**
+     * Could edit a post or render the form
+     * @param Request $request
+     * @return \Framework\Http\RedirectResponse
+     */
     public function __invoke(Request $request)
     {
+        //dependencies
         $session = $this->getService('session');
         $html = new HtmlBuilder();
         $id = $request->getAttribute('id');
@@ -52,12 +58,14 @@ class EditPostAction extends AbstractAction
                 'content' => $html,
                 'content_markdown' => $content
             ])){
+                //redirect to the new post
                 return $this->redirect(
                     "/index.php/blog/article-{$id}.html"
                     ,301
                 );
             }
         }
+        //if no data posted we render the view
         return $this->render(
             'blog/edit.twig',
             compact('blog_post','session','html')
