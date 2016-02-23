@@ -1,0 +1,23 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Connection{% endblock %}
+
+{% set error = session.fetchAndUnset('error') %}
+{% set error_password = session.fetchAndUnset('error.password') %}
+{% set error_username = session.fetchAndUnset('error.username') %}
+
+{% block body %}
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    {{ html.form('post')|raw }}
+        {% if error_username %}
+            <div class="alert alert-danger">{{ error_username }}</div>
+        {% endif %}
+        {{ html.inputLabel('Username','text','username',username)|raw }}
+        {% if error_password %}
+            <div class="alert alert-danger">{{ error_password }}</div>
+        {% endif %}
+        {{ html.inputLabel('Mot de passe','password','password')|raw }}
+    {{ html.form_end('Se connecter')|raw }}
+{% endblock %}

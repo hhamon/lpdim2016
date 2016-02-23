@@ -1,0 +1,11 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Unauthorized{% endblock %}
+{% block body %}
+    <div class="alert-danger alert">
+        {{ error }}
+    </div>
+
+    <a href="/index.php/login/se-connecter">Se Connecter</a>
+
+{% endblock %}

@@ -44,8 +44,25 @@ class NativeDriver implements DriverInterface
         return $default;
     }
 
+    /**
+     * Could fetch and unset a key
+     * @param $id
+     * @param $key
+     * @param $default
+     * @return mixed|null
+     */
+    public function fetchAndUnset($id, $key, $default)
+    {
+        $value = $this->fetch($id,$key,$default);
+        unset($_SESSION[$this->namespace][$key]);
+        return $value;
+    }
+
     private function doFetch($id, $key)
     {
+        if(!isset($_SESSION[$this->namespace])){
+            return null;
+        }
         if (array_key_exists($key, $_SESSION[$this->namespace])) {
             return $_SESSION[$this->namespace][$key];
         }

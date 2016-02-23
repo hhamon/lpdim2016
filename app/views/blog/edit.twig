@@ -1,0 +1,15 @@
+{% extends 'layout.twig' %}
+{% block title %}Edition du Blog Post {{ blog_post.id }}{% endblock %}
+{% set error = session.fetchAndUnset('error') %}
+{% block body %}
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    {{ html.form('post')|raw }}
+    {{ html.inputLabel('Titre','text','title',title?title:blog_post.title)|raw }}
+    {{ html.textareaLabel('Contenu','content',content?content:blog_post.content_markdown)|raw }}
+    {{ html.form_end('Modifier')|raw }}
+
+    <a href="/index.php/blog">Retour à la liste</a>
+{% endblock %}

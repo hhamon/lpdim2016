@@ -1,0 +1,15 @@
+{% extends 'layout.twig' %}
+{% block title %}Création de Blog Post{% endblock %}
+{% set error = session.fetchAndUnset('error') %}
+{% block body %}
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    {{ html.form('post')|raw }}
+    {{ html.inputLabel('Titre','text','title',title)|raw }}
+    {{ html.textareaLabel('Contenu','content',content)|raw }}
+    {{ html.form_end('Enregistrer')|raw }}
+
+    <a href="/index.php/blog">Retour à la liste</a>
+{% endblock %}

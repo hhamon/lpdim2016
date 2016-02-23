@@ -1,0 +1,33 @@
+{
+    "routes": {
+        "homepage": {
+            "path": "/",
+            "defaults": {
+                "_controller": "Application\\Controller\\Blog\\ListPostsAction"
+            },
+            "methods": [ "GET" ]
+        },
+        "blog": {
+            "path": "/blog",
+            "defaults": {
+                "_controller": "Application\\Controller\\Blog\\ListPostsAction"
+            },
+            "methods": [ "GET" ]
+        },
+        "blog_post": {
+            "path": "/blog/article-{id}.html",
+            "defaults": {
+                "_controller": "Application\\Controller\\Blog\\GetPostAction"
+            },
+            "requirements": { "id": "\\d+" },
+            "methods": [ "GET" ]
+        },
+        "hello": {
+            "path": "/hello",
+            "defaults": {
+                "_controller": "Application\\Controller\\Blog\\HelloWorldAction"
+            },
+            "methods": [ "GET" ]
+        }
+    }
+}

@@ -24,4 +24,29 @@
     <route name="hello" path="/hello" methods="GET">
         <param key="_controller">Application\Controller\HelloWorldAction</param>
     </route>
+
+    <route name="create_post" path="/blog/create" methods="GET|POST">
+        <param key="_controller">Application\Controller\Blog\CreatePostAction</param>
+    </route>
+
+    <route name="edit_post" path="/blog/edit/{id}" methods="GET|POST">
+        <param key="_controller">Application\Controller\Blog\EditPostAction</param>
+        <requirement key="id">\d+</requirement>
+    </route>
+
+    <route name="signin" path="/login/s-enregistrer" methods="GET|POST">
+        <param key="_controller">Application\Controller\Login\SignInAction</param>
+    </route>
+
+    <route name="signup" path="/login/se-connecter" methods="GET|POST">
+        <param key="_controller">Application\Controller\Login\SignUpAction</param>
+    </route>
+
+    <route name="signout" path="/login/se-deconnecter" methods="GET">
+        <param key="_controller">Application\Controller\Login\SignOutAction</param>
+    </route>
+
+    <route name="home" path="/home" methods="GET">
+        <param key="_controller">App:Login:Home</param>
+    </route>
 </routes>

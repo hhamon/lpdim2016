@@ -2,6 +2,7 @@
 
 namespace Application;
 
+use Application\Exception\AuthFailedException;
 use Framework\ExceptionEvent;
 use Framework\Http\HttpNotFoundException;
 use Framework\Http\Response;
@@ -46,6 +47,12 @@ class ErrorHandler
 
         if ($exception instanceof MethodNotAllowedException) {
             $event->setResponse($this->render('errors/405.twig', $vars, Response::HTTP_METHOD_NOT_ALLOWED));
+            return;
+        }
+
+        if($exception instanceof AuthFailedException){
+            $vars['error'] = $exception->getMessage();
+            $event->setResponse($this->render('errors/auth.twig',$vars,Response::HTTP_FORBIDDEN));
             return;
         }
 
