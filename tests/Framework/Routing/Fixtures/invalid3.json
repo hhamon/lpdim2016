@@ -1,0 +1,12 @@
+{
+  "routes": {
+    "": {
+      "name": "homepage",
+      "path": "/",
+      "methods": "GET",
+      "params": {
+        "content":"Application\\Controller\\Blog\\ListPostsAction"
+      }
+    }
+  }
+}

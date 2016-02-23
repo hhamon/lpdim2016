@@ -1,0 +1,50 @@
+{
+  "routes": {
+    "": [
+      {
+        "name": "homepage",
+        "path": "/",
+        "methods": "GET",
+        "params": {
+          "key": "_controller",
+          "content": "Application\\Controller\\Blog\\ListPostsAction"
+        }
+      },
+      {
+        "name": "blog",
+        "path": "/blog",
+        "methods": "GET",
+        "params": {
+          "key": "_controller",
+          "content": "Application\\Controller\\Blog\\ListPostsAction"
+        }
+      },
+      {
+        "name": "blog_post",
+        "path": "/blog/article-{id}.html",
+        "methods": "GET",
+        "params": {
+          "key": "_controller",
+          "content": "Application\\Controller\\Blog\\GetPostAction"
+        },
+        "requirement": {
+          "key": "id",
+          "content": "\\d+"
+        }
+      },
+      {
+        "name": "hello",
+        "path": "/hello",
+        "methods": "GET",
+        "params": {
+          "key": "_controller",
+          "content": "Application\\Controller\\HelloWorldAction"
+        }
+      },
+      {
+        "name": "login",
+        "path": "/login"
+      }
+    ]
+  }
+}

@@ -1,6 +1,6 @@
 parameters:
     database.dsn:      mysql:host=localhost;port=3306;dbname=lp_dim_2016
     database.user:     root
-    database.password: ~
+    database.password: toor
     app.environment: dev
     app.debug: true
