@@ -6,6 +6,7 @@ use Application\ErrorHandler;
 use Application\LoggerHandler;
 use Application\Repository\BlogPostRepository;
 use Framework\ControllerFactory;
+use Framework\ControllerFactoryAdapter;
 use Framework\ControllerListener;
 use Framework\EventManager\EventManager;
 use Framework\HttpKernel;
@@ -113,7 +114,7 @@ $dic->register('event_manager', function (ServiceLocator $dic) {
 $dic->register('http_kernel', function (ServiceLocator $dic) {
     return new HttpKernel(
         $dic->getService('event_manager'),
-        new ControllerFactory()
+        new ControllerFactoryAdapter(new ControllerFactory())
     );
 });
 

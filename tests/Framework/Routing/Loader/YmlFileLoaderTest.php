@@ -46,7 +46,6 @@ class YmlFileLoaderTest extends \PHPUnit_Framework_TestCase
         $loader = new YamlFileLoader();
 
         $loaded = $loader->load(__DIR__.'/../Fixtures/routes.yml');
-        print_r($loaded);
 
         $this->assertInstanceOf(
             RouteCollection::class,

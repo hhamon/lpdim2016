@@ -1,32 +1,32 @@
 homepage:
   path: /
-  default: { _controller: "Application\\Controller\\Blog\\ListPostsAction" }
+  default: { _controller: "Application:Blog:ListPostsAction" }
   methods: GET
 
 login:
   path: /login
-  default: { _controller: "Application\\Controller\\LoginAction" }
+  default: { _controller: "App:LoginAction" }
   methods: GET|POST
 
 dashboard:
   path: /dashboard
-  default: { _controller: "Application\\Controller\\DashboardAction" }
+  default: { _controller: "App:DashboardAction" }
   methods: GET
 
 blog:
   path: /blog
-  default: { _controller: "Application\\Controller\\Blog\\ListPostsAction" }
+  default: { _controller: "App:Controller\\Blog\\ListPostsAction" }
   methods: GET
 
 create_post:
   path: /blog/new
-  default: { _controller: "Application\\Controller\\Blog\\CreatePostAction" }
+  default: { _controller: "App:Blog:CreatePostAction" }
   methods: GET|POST
 
 
 update_post:
   path: /blog/article-{id}/update
-  default: { _controller: "Application\\Controller\\Blog\\UpdatePostAction" }
+  default: { _controller: "App:Blog:UpdatePostAction" }
   methods: GET|POST
 
 
