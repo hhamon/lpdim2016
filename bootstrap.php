@@ -2,9 +2,11 @@
 
 require_once __DIR__.'/vendor/autoload.php';
 
+use Application\AuthHandler;
 use Application\ErrorHandler;
 use Application\LoggerHandler;
 use Application\Repository\BlogPostRepository;
+use Application\Repository\GuestRepository;
 use Framework\ControllerFactory;
 use Framework\ControllerListener;
 use Framework\EventManager\EventManager;
@@ -18,7 +20,6 @@ use Framework\Routing\Loader\CompositeFileLoader;
 use Framework\Routing\Loader\PhpFileLoader;
 use Framework\Routing\Loader\XmlFileLoader;
 use Framework\ServiceLocator\ServiceLocator;
-use Framework\Session\Driver\ArrayDriver;
 use Framework\Session\Driver\NativeDriver;
 use Framework\Session\Session;
 use Framework\Templating\TwigRendererAdapter;
@@ -43,9 +44,6 @@ $dic->setParameter('twig.options', [
     'debug' => true,
 ]);
 $dic->setParameter('logger.log_file', __DIR__.'/app/cache/app.log');
-$dic->setParameter('session_blog_post.options',
-    ['session.name' => 'blog_post']
-);
 
 $dic->setParameter('session.options', [
     'session.name' => 'lpdim2016',
@@ -54,6 +52,10 @@ $dic->setParameter('session.options', [
 
 $dic->register('repository.blog_post', function (ServiceLocator $dic) {
     return new BlogPostRepository($dic->getService('database'));
+});
+
+$dic->register('repository.guest', function (ServiceLocator $dic) {
+    return new GuestRepository($dic->getService('database'));
 });
 
 $dic->register('database', function (ServiceLocator $dic) {
@@ -94,11 +96,6 @@ $dic->register('error_handler', function (ServiceLocator $dic) {
     );
 });
 
-$dic->register('session_blog_post',function(ServiceLocator $dic){
-    $session = new Session(new ArrayDriver(), $dic->getParameter('session_blog_post.options'), true);
-    return $session;
-});
-
 $dic->register('session', function (ServiceLocator $dic) {
     return new Session(new NativeDriver(), $dic->getParameter('session.options'));
 });
@@ -118,7 +115,12 @@ $dic->register('event_manager', function (ServiceLocator $dic) {
     $manager->addEventListener(KernelEvents::CONTROLLER, [ new ControllerListener($dic), 'onKernelController' ]);
     $manager->addEventListener(KernelEvents::EXCEPTION, [ new LoggerHandler($dic->getService('logger')), 'onKernelException' ]);
     $manager->addEventListener(KernelEvents::EXCEPTION, [ $dic->getService('error_handler'), 'onKernelException' ]);
-
+    $manager->addEventListener(KernelEvents::REQUEST, [
+            new AuthHandler($dic->getService('router'),
+            $dic->getService('session')),
+            'onKernelRequest'
+        ]
+    );
     return $manager;
 });
 

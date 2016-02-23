@@ -17,7 +17,7 @@ class EditPostAction extends AbstractAction
 {
     public function __invoke(Request $request)
     {
-        $session = $this->getService('session_blog_post');
+        $session = $this->getService('session');
         $html = new HtmlBuilder();
         $id = $request->getAttribute('id');
         $repository = $this->getService('repository.blog_post');

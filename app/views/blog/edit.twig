@@ -1,9 +1,6 @@
 {% extends 'layout.twig' %}
-{% block stylesheets %}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-{% endblock %}
 {% block title %}Edition du Blog Post {{ blog_post.id }}{% endblock %}
-{% set error = session.fetch('error') %}
+{% set error = session.fetchAndUnset('error') %}
 {% block body %}
     {% if error %}
         <div class="alert alert-danger">{{ error }}</div>

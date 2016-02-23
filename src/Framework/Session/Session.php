@@ -87,9 +87,10 @@ class Session implements SessionInterface
 
         // Force session ID to be regenerated to
         // prevent session hijacking attack
-        if (session_regenerate_id(true)) {
-            $this->id = session_id($this->id);
-        }
+        $this->id = session_id();
+//        if (session_regenerate_id(true)) {
+//            $this->id = session_id($this->id);
+//        }
 
         // Configure more options here
         // ...
@@ -127,6 +128,17 @@ class Session implements SessionInterface
         $this->destroyed = session_destroy();
 
         return $this->destroyed;
+    }
+
+    public function fetchAndUnset($key,$default = null)
+    {
+        if (!is_string($key)) {
+            throw new \InvalidArgumentException('Session variable name must be a valid string.');
+        }
+
+        $this->start();
+
+        return $this->driver->fetchAndUnset($this->id, $key, $default);
     }
 
     public function store($key, $value)

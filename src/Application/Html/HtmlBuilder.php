@@ -16,7 +16,14 @@ class HtmlBuilder
 
     }
 
-    public function inputLabel($label,$type,$name,$value = '')
+    /**
+     * @param $label
+     * @param $type
+     * @param $name
+     * @param string $value
+     * @return string
+     */
+    public function inputLabel($label, $type, $name, $value = '')
     {
         $string = "<div class=\"form-group\">";
         $string .= $this->label($label,$name);
@@ -25,7 +32,13 @@ class HtmlBuilder
         return $string;
     }
 
-    public function textareaLabel($label,$name,$value = '')
+    /**
+     * @param $label
+     * @param $name
+     * @param string $value
+     * @return string
+     */
+    public function textareaLabel($label, $name, $value = '')
     {
         $string = "<div class=\"form-group\">";
         $string .= $this->label($label,$name);
@@ -34,26 +47,51 @@ class HtmlBuilder
         return $string;
     }
 
-    public function label($label,$for)
+    /**
+     * @param $label
+     * @param $for
+     * @return string
+     */
+    public function label($label, $for)
     {
         return "<label for=\"{$for}\" class=\"control-label\">{$label}</label>";
     }
 
-    public function input($type,$name,$value = '')
+    /**
+     * @param $type
+     * @param $name
+     * @param string $value
+     * @return string
+     */
+    public function input($type, $name, $value = '')
     {
         return "<input type=\"{$type}\" name=\"{$name}\" id=\"{$name}\" value=\"{$value}\" class=\"form-control\"/>";
     }
 
-    public function textarea($name,$value = '')
+    /**
+     * @param $name
+     * @param string $value
+     * @return string
+     */
+    public function textarea($name, $value = '')
     {
         return "<textarea name=\"{$name}\" id=\"{$name}\" class=\"form-control\">{$value}</textarea>";
     }
 
-    public function form($method,$action = '')
+    /**
+     * @param $method
+     * @param string $action
+     * @return string
+     */
+    public function form($method, $action = '')
     {
         return "<form action=\"{$action}\" method=\"{$method}\" class=\"form\">";
     }
 
+    /**
+     * @param string $submit
+     * @return string
+     */
     public function form_end($submit = '')
     {
         if(!$submit){
