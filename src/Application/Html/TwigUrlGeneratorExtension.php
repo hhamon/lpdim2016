@@ -35,6 +35,7 @@ class TwigUrlGeneratorExtension extends \Twig_Extension
         $this->generator = $generator;
     }
 
+    //references functions
     public function getFunctions()
     {
         return [
@@ -44,6 +45,7 @@ class TwigUrlGeneratorExtension extends \Twig_Extension
     }
 
     /**
+     * generate a relative url
      * @param $name
      * @param array $params
      * @return mixed
@@ -54,6 +56,7 @@ class TwigUrlGeneratorExtension extends \Twig_Extension
     }
 
     /**
+     * generate a absolute url
      * @param $name
      * @param array $params
      * @return mixed

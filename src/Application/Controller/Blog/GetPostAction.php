@@ -8,6 +8,10 @@ use Framework\Http\Request;
 
 class GetPostAction extends AbstractAction
 {
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function __invoke(Request $request)
     {
         $repository = $this->getService('repository.blog_post');

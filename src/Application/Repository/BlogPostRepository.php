@@ -39,7 +39,13 @@ SQL;
         return $this->fetchAll($query);
     }
 
-    public function edit($pk,array $args = [])
+    /**
+     * Edit a blog post
+     * @param $pk
+     * @param array $args
+     * @return bool
+     */
+    public function edit($pk, array $args = [])
     {
         $query = <<<SQL
 UPDATE blog_post SET title=:title, content=:content, content_markdown=:content_markdown WHERE id=:id
@@ -61,6 +67,12 @@ SQL;
         $this->dbh->rollBack();
         return false;
     }
+
+    /**
+     * create a new blog post
+     * @param array $args
+     * @return string
+     */
     public function create(array $args = [])
     {
         $query = <<<SQL

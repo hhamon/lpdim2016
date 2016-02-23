@@ -18,6 +18,7 @@ class ControllerFactory implements ControllerFactoryInterface
 
         $class = $params['_controller'];
 
+        //if it's a short Class
         if(preg_match("/App\:/",$class)){
             $class = $this->reformatClass($class);
         }
@@ -34,15 +35,22 @@ class ControllerFactory implements ControllerFactoryInterface
         return $action;
     }
 
+    /**
+     * @param $class
+     * @return string
+     */
     private function reformatClass($class)
     {
+        //explode the string class
         $parts = explode(':',$class);
         array_shift($parts);
         $class = "Application\\Controller\\";
+        //iterate with each parts and add a namespace separator
         foreach ($parts as $part) {
             $class .= sprintf('%s\\',$part);
             array_shift($parts);
         }
+        //remove parasits
         $class = trim($class,'\\');
         return $class."Action";
     }

@@ -56,7 +56,14 @@ class UrlGenerator implements UrlGeneratorInterface
         );
     }
 
-    private function generateRoute(Route $route,array $params, $type)
+    /**
+     * generate path for given route
+     * @param Route $route
+     * @param array $params
+     * @param $type
+     * @return mixed|string
+     */
+    private function generateRoute(Route $route, array $params, $type)
     {
         $url = '/index.php'.$route->getPath();
         $requirements = $route->getRequirements();
