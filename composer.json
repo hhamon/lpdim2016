@@ -5,8 +5,8 @@
     "license": "proprietary",
     "authors": [
         {
-            "name": "Hugo Hamon",
-            "email": "hugo.hamon@sensiolabs.com"
+            "name": "Romain Oliva",
+            "email": "olivar.info@gmail.com"
         }
     ],
     "autoload": {

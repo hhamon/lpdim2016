@@ -1,0 +1,9 @@
+{
+    "routes": {
+        "homepage": {
+            "path": "/",
+            "defaults": { "Application\\Controller\\Blog\\ListPostsAction" : "" },
+            "methods": [ "GET" ]
+        }
+    }
+}
