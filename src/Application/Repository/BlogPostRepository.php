@@ -52,9 +52,9 @@ SQL;
     public function create(array $args = [])
     {
         $query = <<<SQL
-INSERT into blog_post (title,content,published_at)
+INSERT into blog_post (title,content,markdownContent,published_at)
 VALUES
-(:title,:content,NOW());
+(:title,:content,:markdownContent,NOW());
 SQL;
         $this->dbh->beginTransaction();
         $stmt = $this->dbh->prepare($query);
@@ -75,7 +75,7 @@ SQL;
     public function edit($pk,array $args = [])
     {
         $query = <<<SQL
-UPDATE blog_post SET title=:title, content=:content WHERE id=:id
+UPDATE blog_post SET title=:title, content=:content, markdownContent=:markdownContent WHERE id=:id;
 SQL;
         $this->dbh->beginTransaction();
         $stmt = $this->dbh->prepare($query);

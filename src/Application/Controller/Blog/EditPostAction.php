@@ -4,6 +4,7 @@ namespace Application\Controller\Blog;
 
 use Framework\AbstractAction;
 use Framework\Http\Request;
+use Michelf\Markdown;
 
 class EditPostAction extends AbstractAction
 {
@@ -24,10 +25,12 @@ class EditPostAction extends AbstractAction
                 return $this->render('blog/new.twig',$args);
             }
 
+            $html = addslashes(Markdown::defaultTransform($content));
             $repository = $this->getService('repository.blog_post');
             if($repository->edit($id,[
                 'title' => $title,
-                'content' => $content,
+                'content' => $html,
+                'markdownContent' => $content
             ])){
                 return $this->redirect(
                     "../article-{$id}.html"
