@@ -45,4 +45,8 @@
     <route name="signout" path="/login/se-deconnecter" methods="GET">
         <param key="_controller">Application\Controller\Login\SignOutAction</param>
     </route>
+
+    <route name="home" path="/home" methods="GET">
+        <param key="_controller">App:Login:Home</param>
+    </route>
 </routes>
