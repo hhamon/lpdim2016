@@ -1,0 +1,18 @@
+{
+    "routes": {
+        "homepage": {
+            "path": "/home",
+            "defaults": {
+                "_controller": "Application\\Controller\\HomePageAction"
+            },
+            "methods": [ "GET", "POST" ]
+        }, 
+        "homepage2": {
+            "path": "/home2",
+            "defaults": {
+                "_controller": "Application\\Controller\\HomePageAction"
+            },
+            "methods": [ "GET", "POST" ]
+        }
+    }
+}
