@@ -4,6 +4,7 @@ namespace Framework\Templating;
 
 use Framework\Http\Response;
 use Framework\Http\ResponseInterface;
+use Twig_Extensions_Extension_Text;
 
 class TwigRendererAdapter implements ResponseRendererInterface
 {
@@ -12,6 +13,7 @@ class TwigRendererAdapter implements ResponseRendererInterface
     public function __construct(\Twig_Environment $twig)
     {
         $this->twig = $twig;
+        $this->twig->addExtension(new Twig_Extensions_Extension_Text());
     }
 
     public function render($view, array $vars = [])

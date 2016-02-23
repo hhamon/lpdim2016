@@ -1,0 +1,2 @@
+hello:
+  default: { _controller: "Application\\Controller\\HelloWorldAction" }

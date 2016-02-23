@@ -6,6 +6,7 @@ use Application\ErrorHandler;
 use Application\LoggerHandler;
 use Application\Repository\BlogPostRepository;
 use Framework\ControllerFactory;
+use Framework\ControllerFactoryAdapter;
 use Framework\ControllerListener;
 use Framework\EventManager\EventManager;
 use Framework\HttpKernel;
@@ -15,6 +16,7 @@ use Framework\Routing\Router;
 use Framework\Routing\Loader\CompositeFileLoader;
 use Framework\Routing\Loader\PhpFileLoader;
 use Framework\Routing\Loader\XmlFileLoader;
+use Framework\Routing\Loader\YamlFileLoader;
 use Framework\ServiceLocator\ServiceLocator;
 use Framework\Session\Driver\NativeDriver;
 use Framework\Session\Session;
@@ -32,7 +34,7 @@ $dic->setParameter('database.options', [
     \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
     \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'",
 ]);
-$dic->setParameter('router.file', __DIR__.'/app/config/routes.xml');
+$dic->setParameter('router.file', __DIR__.'/app/config/routes.yml');
 $dic->setParameter('app.views_dir', __DIR__.'/app/views');
 $dic->setParameter('twig.options', [
     'cache' => __DIR__.'/../app/cache/twig',
@@ -72,6 +74,8 @@ $dic->register('router', function (ServiceLocator $dic) {
     $loader = new CompositeFileLoader();
     $loader->add(new PhpFileLoader());
     $loader->add(new XmlFileLoader());
+    $loader->add(new YamlFileLoader());
+
 
     return new Router($dic->getParameter('router.file'), $loader);
 });
@@ -110,7 +114,7 @@ $dic->register('event_manager', function (ServiceLocator $dic) {
 $dic->register('http_kernel', function (ServiceLocator $dic) {
     return new HttpKernel(
         $dic->getService('event_manager'),
-        new ControllerFactory()
+        new ControllerFactoryAdapter(new ControllerFactory())
     );
 });
 

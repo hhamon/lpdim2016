@@ -17,6 +17,7 @@ class ControllerFactory implements ControllerFactoryInterface
         }
 
         $class = $params['_controller'];
+
         if (!class_exists($class)) {
             throw new \RuntimeException(sprintf('Controller class "%s" does not exist or cannot be autoloaded.', $class));
         }
