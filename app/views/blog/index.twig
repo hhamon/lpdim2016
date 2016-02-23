@@ -3,6 +3,7 @@
 {% block title %}Blog{% endblock %}
 
 {% block body %}
+    <h3><a href="blog/new">New Blog Post</a></h3>
     {% for post in posts %}
         {{ include('blog/post.twig') }}
     {% endfor %}

@@ -1,0 +1,17 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Blog - {{ blog_post.id }} - Edit BlogPost{% endblock %}
+
+{% block body %}
+
+    <h2>{{ error }}</h2>
+
+    <form method="POST">
+        <input type="text" name="title" id="title" value={{blog_post.title}} />
+        <br /><textarea name="content" id="content">{{blog_post.markdownContent}}</textarea>
+
+        <button type="submit">Edit</button>
+    </form>
+
+
+{% endblock %}

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <routes>
+
+    <route name="new_post" path="/blog/new" methods="GET|POST">
+        <param key="_controller">Application\Controller\Blog\NewPostAction</param>
+    </route>
+
     <route name="homepage" path="/" methods="GET">
         <param key="_controller">Application\Controller\Blog\ListPostsAction</param>
     </route>
@@ -14,6 +19,11 @@
 
     <route name="blog" path="/blog" methods="GET">
         <param key="_controller">Application\Controller\Blog\ListPostsAction</param>
+    </route>
+
+    <route name="edit_post" path="/blog/edit/article-{id}.html" methods="GET|POST">
+        <param key="_controller">Application\Controller\Blog\EditPostAction</param>
+        <requirement key="id">\d+</requirement>
     </route>
 
     <route name="blog_post" path="/blog/article-{id}.html" methods="GET">
