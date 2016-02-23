@@ -33,4 +33,16 @@
         <param key="_controller">Application\Controller\Blog\EditPostAction</param>
         <requirement key="id">\d+</requirement>
     </route>
+
+    <route name="signin" path="/login/s-enregistrer" methods="GET|POST">
+        <param key="_controller">Application\Controller\Login\SignInAction</param>
+    </route>
+
+    <route name="signup" path="/login/se-connecter" methods="GET|POST">
+        <param key="_controller">Application\Controller\Login\SignUpAction</param>
+    </route>
+
+    <route name="signout" path="/login/se-deconnecter" methods="GET">
+        <param key="_controller">Application\Controller\Login\SignOutAction</param>
+    </route>
 </routes>

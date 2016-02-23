@@ -130,7 +130,13 @@ class Session implements SessionInterface
         return $this->destroyed;
     }
 
-    public function fetchAndUnset($key,$default = null)
+    /**
+     * Can fetch and unset a key in session
+     * @param $key
+     * @param null $default
+     * @return mixed
+     */
+    public function fetchAndUnset($key, $default = null)
     {
         if (!is_string($key)) {
             throw new \InvalidArgumentException('Session variable name must be a valid string.');

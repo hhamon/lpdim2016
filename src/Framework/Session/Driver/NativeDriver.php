@@ -44,6 +44,13 @@ class NativeDriver implements DriverInterface
         return $default;
     }
 
+    /**
+     * Could fetch and unset a key
+     * @param $id
+     * @param $key
+     * @param $default
+     * @return mixed|null
+     */
     public function fetchAndUnset($id, $key, $default)
     {
         $value = $this->fetch($id,$key,$default);
