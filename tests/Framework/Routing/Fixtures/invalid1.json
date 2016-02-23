@@ -1,0 +1,12 @@
+{
+  "routes": {
+    "": {
+      "path": "/",
+      "methods":"GET",
+      "params": {
+        "key":"_controller",
+        "content":"Application\\Controller\\Blog\\ListPostsAction"
+      }
+    }
+  }
+}

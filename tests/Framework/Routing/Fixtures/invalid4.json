@@ -1,0 +1,14 @@
+{
+  "routes": {
+    "": {
+      "name": "homepage",
+      "path": "/{lang}",
+      "methods": "GET",
+      "params": {
+        "key": "_controller",
+        "content": "Application\\Controller\\Blog\\ListPostsAction"
+      },
+      "requirement": "[a-z]{2}"
+    }
+  }
+}
