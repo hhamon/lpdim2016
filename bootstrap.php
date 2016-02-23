@@ -19,6 +19,7 @@ use Framework\Routing\Router;
 use Framework\Routing\Loader\CompositeFileLoader;
 use Framework\Routing\Loader\PhpFileLoader;
 use Framework\Routing\Loader\XmlFileLoader;
+use Framework\Routing\UrlGenerator;
 use Framework\ServiceLocator\ServiceLocator;
 use Framework\Session\Driver\NativeDriver;
 use Framework\Session\Session;
@@ -86,6 +87,16 @@ $dic->register('router', function (ServiceLocator $dic) {
     $loader->add(new JsonFileLoader());
 
     return new Router($dic->getParameter('router.file'), $loader);
+});
+
+$dic->register('url_generator', function (ServiceLocator $dic) {
+    $loader = new CompositeFileLoader();
+    $loader->add(new PhpFileLoader());
+    $loader->add(new XmlFileLoader());
+    $loader->add(new YamlFileLoader());
+    $loader->add(new JsonFileLoader());
+
+    return new UrlGenerator($dic->getParameter('router.file'), $loader);
 });
 
 $dic->register('error_handler', function (ServiceLocator $dic) {

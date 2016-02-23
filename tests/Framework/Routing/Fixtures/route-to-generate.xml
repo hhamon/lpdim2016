@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<routes>
+    <route name="blog_post" path="/blog/article-{id}.html" methods="GET">
+        <param key="_controller">Application\Controller\Blog\GetPostAction</param>
+        <requirement key="id">\d+</requirement>
+    </route>
+</routes>
