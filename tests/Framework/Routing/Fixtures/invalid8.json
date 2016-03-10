@@ -1,0 +1,8 @@
+{
+  "routes": {
+    "homepage": {
+      "path": "/home",
+      "params": "123"
+    }
+  }
+}

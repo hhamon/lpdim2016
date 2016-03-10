@@ -1,0 +1,28 @@
+homepage:
+    path: /
+    methods: GET
+    params: { _controller: 'Application\Controller\Blog\ListPostsAction' }
+
+blog:
+    path:   /blog
+    methods: GET
+    params: { _controller: 'Application\Controller\Blog\ListPostsAction' }
+
+blog_post:
+    path:    '/blog/article-{id}.html'
+    methods: GET
+    params: { _controller: 'Application\Controller\Blog\GetPostAction' }
+    requirements: { id: '\d+' }
+
+create_blog_post:
+    path:    /blog/new
+    methods: [GET,POST]
+    params: { _controller: 'Application\Controller\Blog\CreatePostAction' }
+
+hello:
+    path:    /hello
+    methods: GET
+    params: { _controller: 'Application\Controller\HelloWorldAction' }
+
+login:
+    path: /login

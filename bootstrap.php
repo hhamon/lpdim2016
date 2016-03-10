@@ -13,8 +13,10 @@ use Framework\KernelEvents;
 use Framework\RouterListener;
 use Framework\Routing\Router;
 use Framework\Routing\Loader\CompositeFileLoader;
+use Framework\Routing\Loader\JsonFileLoader;
 use Framework\Routing\Loader\PhpFileLoader;
 use Framework\Routing\Loader\XmlFileLoader;
+use Framework\Routing\Loader\YamlFileLoader;
 use Framework\ServiceLocator\ServiceLocator;
 use Framework\Session\Driver\NativeDriver;
 use Framework\Session\Session;
@@ -22,6 +24,7 @@ use Framework\Templating\TwigRendererAdapter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Yaml\Parser as YamlParser;
 
 $settings = Yaml::parse(file_get_contents(__DIR__.'/app/config/settings.yml'));
 
@@ -72,6 +75,8 @@ $dic->register('router', function (ServiceLocator $dic) {
     $loader = new CompositeFileLoader();
     $loader->add(new PhpFileLoader());
     $loader->add(new XmlFileLoader());
+    $loader->add(new YamlFileLoader(new YamlParser()));
+    $loader->add(new JsonFileLoader());
 
     return new Router($dic->getParameter('router.file'), $loader);
 });

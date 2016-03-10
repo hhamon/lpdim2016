@@ -1,0 +1,4 @@
+homepage:
+    path: /home
+    # defaults is not a supported key
+    defaults: { _controller: 'Foo\Bar\BazController' }

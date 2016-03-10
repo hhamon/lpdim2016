@@ -1,0 +1,4 @@
+homepage:
+    path: /
+    # methods must not be empty when it's set
+    methods: ~
