@@ -16,4 +16,7 @@ interface RequestInterface extends MessageInterface
 
     public function getMethod();
     public function getPath();
+    public function getDomain();
+    public function getPort();
+    public function getScriptName();
 }

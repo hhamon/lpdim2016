@@ -4,6 +4,20 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
+        <ul>
+            <li>
+                <a href="{{ path('homepage') }}">Homepage</a>
+            </li>
+            <li>
+                <a href="{{ path('blog') }}">Blog</a>
+            </li>
+            <li>
+                <a href="{{ path('dashboard') }}">Dashboard</a>
+            </li>
+            <li>
+                <a href="{{ path('login') }}">Login</a>
+            </li>
+        </ul>
         <h1>{{ block('title') }}</h1>
         {% block body %}{% endblock %}
 

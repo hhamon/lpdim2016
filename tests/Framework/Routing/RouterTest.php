@@ -2,6 +2,7 @@
 
 namespace Tests\Framework\Routing;
 
+use Framework\Routing\Loader\LazyFileLoader;
 use Framework\Routing\Loader\PhpFileLoader;
 use Framework\Routing\RequestContext;
 use Framework\Routing\Router;
@@ -14,7 +15,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testMethodNotAllowed()
     {
         $router = $this->createRouter();
-        $router->match(new RequestContext('POST', '/home'));
+        $router->match(new RequestContext('POST', '/home', 'localhost'));
     }
 
     /**
@@ -23,7 +24,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testNoMatchingRoute()
     {
         $router = $this->createRouter();
-        $router->match(new RequestContext('GET', '/unknown'));
+        $router->match(new RequestContext('GET', '/unknown', 'localhost'));
     }
 
     public function testMatchRoute()
@@ -32,17 +33,17 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             [ '_route' => 'login' ],
-            $router->match(new RequestContext('GET', '/login'))
+            $router->match(new RequestContext('GET', '/login', 'localhost'))
         );
 
         $this->assertSame(
             [ '_route' => 'home', '_controller' => 'Application\Controller\HomeAction' ],
-            $router->match(new RequestContext('GET', '/home'))
+            $router->match(new RequestContext('GET', '/home', 'localhost'))
         );
     }
 
     private function createRouter()
     {
-        return new Router(__DIR__.'/Fixtures/routes.php', new PhpFileLoader());
+        return new Router(new LazyFileLoader(__DIR__.'/Fixtures/routes.php', new PhpFileLoader()));
     }
 }

@@ -85,6 +85,24 @@ class Route
         return $this->parameters;
     }
 
+    /**
+     * Returns a route parameter value.
+     *
+     * @param string $name The route parameter name
+     *
+     * @return mixed
+     *
+     * @return RouteParameterNotFoundException
+     */
+    public function getParameter($name)
+    {
+        if (!array_key_exists($name, $this->parameters)) {
+            throw new RouteParameterNotFoundException(sprintf('Parameter "%s" does not exist.', $name));
+        }
+
+        return $this->parameters[$name];
+    }
+
     public function match($path)
     {
         try {
@@ -99,5 +117,28 @@ class Route
     public function getPath()
     {
         return $this->path;
+    }
+
+    public function matchRequirement($name, $value)
+    {
+        $pattern = sprintf('`^%s$`', $this->getRequirementPattern($name));
+
+        return 1 === preg_match($pattern, $value);
+    }
+
+    public function getPathTokens()
+    {
+        $tokens = [];
+        preg_match_all('#\{([a-z]+)\}#i', $this->path, $matches, PREG_OFFSET_CAPTURE|PREG_SET_ORDER);
+        if (!count($matches)) {
+            return $tokens;
+        }
+
+        
+        foreach ($matches as $match) {
+            $tokens[] = $match[1][0];
+        }
+
+        return $tokens;
     }
 }

@@ -5,6 +5,7 @@ require_once __DIR__.'/vendor/autoload.php';
 use Application\ErrorHandler;
 use Application\LoggerHandler;
 use Application\Repository\BlogPostRepository;
+use Application\Twig\RoutingExtension;
 use Framework\ControllerFactory;
 use Framework\ControllerListener;
 use Framework\EventManager\EventManager;
@@ -14,9 +15,11 @@ use Framework\RouterListener;
 use Framework\Routing\Router;
 use Framework\Routing\Loader\CompositeFileLoader;
 use Framework\Routing\Loader\JsonFileLoader;
+use Framework\Routing\Loader\LazyFileLoader;
 use Framework\Routing\Loader\PhpFileLoader;
 use Framework\Routing\Loader\XmlFileLoader;
 use Framework\Routing\Loader\YamlFileLoader;
+use Framework\Routing\UrlGenerator;
 use Framework\ServiceLocator\ServiceLocator;
 use Framework\Session\Driver\NativeDriver;
 use Framework\Session\Session;
@@ -61,24 +64,35 @@ $dic->register('database', function (ServiceLocator $dic) {
 });
 
 $dic->register('twig', function (ServiceLocator $dic) {
-    return new \Twig_Environment(
+    $twig = new \Twig_Environment(
         new \Twig_Loader_Filesystem($dic->getParameter('app.views_dir')),
         $dic->getParameter('twig.options')
     );
+    $twig->addExtension(new RoutingExtension($dic->getService('url_generator')));
+
+    return $twig;
 });
 
 $dic->register('renderer', function (ServiceLocator $dic) {
     return new TwigRendererAdapter($dic->getService('twig'));
 });
 
-$dic->register('router', function (ServiceLocator $dic) {
+$dic->register('router.loader', function (ServiceLocator $dic) {
     $loader = new CompositeFileLoader();
     $loader->add(new PhpFileLoader());
     $loader->add(new XmlFileLoader());
     $loader->add(new YamlFileLoader(new YamlParser()));
     $loader->add(new JsonFileLoader());
 
-    return new Router($dic->getParameter('router.file'), $loader);
+    return new LazyFileLoader($dic->getParameter('router.file'), $loader);
+});
+
+$dic->register('url_generator', function (ServiceLocator $dic) {
+    return new UrlGenerator($dic->getService('router.loader'));
+});
+
+$dic->register('router', function (ServiceLocator $dic) {
+    return new Router($dic->getService('router.loader'));
 });
 
 $dic->register('error_handler', function (ServiceLocator $dic) {
@@ -104,7 +118,7 @@ $dic->register('logger', function (ServiceLocator $dic) {
 
 $dic->register('event_manager', function (ServiceLocator $dic) {
     $manager = new EventManager();
-    $manager->addEventListener(KernelEvents::REQUEST, [ new RouterListener($dic->getService('router')), 'onKernelRequest' ]);
+    $manager->addEventListener(KernelEvents::REQUEST, [ new RouterListener($dic->getService('router'), $dic->getService('url_generator')), 'onKernelRequest' ]);
     $manager->addEventListener(KernelEvents::CONTROLLER, [ new ControllerListener($dic), 'onKernelController' ]);
     $manager->addEventListener(KernelEvents::EXCEPTION, [ new LoggerHandler($dic->getService('logger')), 'onKernelException' ]);
     $manager->addEventListener(KernelEvents::EXCEPTION, [ $dic->getService('error_handler'), 'onKernelException' ]);

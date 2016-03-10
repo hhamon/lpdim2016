@@ -5,5 +5,8 @@
 {% block body %}
     {% for post in posts %}
         {{ include('blog/post.twig') }}
+        <p>
+            <a href="{{ path('blog_post', {'id': post.id}) }}">Lire la suite.</a>
+        </p>
     {% endfor %}
 {% endblock %}
