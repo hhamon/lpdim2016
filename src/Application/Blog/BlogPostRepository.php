@@ -5,7 +5,9 @@ namespace Application\Blog;
 class BlogPostRepository
 {
     private $dbh;
-    private $insertStmt;
+    private $insertOnePostStmt;
+    private $selectOnePostStmt;
+    private $selectMostRecentPostsStmt;
 
     /**
      * Constructor.
@@ -29,6 +31,7 @@ class BlogPostRepository
         return [
             'title' => $post->getTitle(),
             'content' => $post->getContent(),
+            'htmlContent' => $post->getHtmlContent(),
             'publishedAt' => $post->getPublishedAt()->format('Y-m-d H:i:s'),
         ];
     }
@@ -38,16 +41,66 @@ class BlogPostRepository
      *
      * @return \PDOStatement
      */
-    private function insertStatement()
+    private function insertOnePostStatement()
     {
-        if ($this->insertStmt) {
-            return $this->insertStmt;
+        if ($this->insertOnePostStmt) {
+            return $this->insertOnePostStmt;
         }
 
-        return $this
-            ->dbh
-            ->prepare('INSERT INTO `blog_post` (`title`, `content`, `published_at`) VALUES (:title, :content, :publishedAt);')
-        ;
+        $query = <<<SQL
+INSERT INTO `blog_post`
+(`title`, `content`, `html_content`, `published_at`)
+VALUES
+(:title, :content, :htmlContent, :publishedAt);
+SQL;
+
+        $this->insertOnePostStmt = $this->dbh->prepare($query);
+
+        return $this->insertOnePostStmt;
+    }
+
+    /**
+     * Lazy loads the \PDOStatement instance to select one blog post.
+     *
+     * @return \PDOStatement
+     */
+    private function selectOnePostStatement()
+    {
+        if ($this->selectOnePostStmt) {
+            return $this->selectOnePostStmt;
+        }
+
+        $query = <<<SQL
+SELECT * FROM blog_post
+WHERE (published_at iS NULL OR published_at <= NOW()) AND id = :id;
+SQL;
+
+        $this->selectOnePostStmt = $this->dbh->prepare($query);
+
+        return $this->selectOnePostStmt;
+    }
+
+    /**
+     * Lazy loads the \PDOStatement instance to select most recent blog posts.
+     *
+     * @return \PDOStatement
+     */
+    private function selectMostRecentPostsStatement()
+    {
+        if ($this->selectMostRecentPostsStmt) {
+            return $this->selectMostRecentPostsStmt;
+        }
+
+        $query = <<<SQL
+SELECT * FROM blog_post
+WHERE published_at iS NULL or published_at <= NOW()
+ORDER BY published_at DESC
+LIMIT :limit;
+SQL;
+
+        $this->selectMostRecentPostsStmt = $this->dbh->prepare($query);
+
+        return $this->selectMostRecentPostsStmt;
     }
 
     /**
@@ -60,7 +113,7 @@ class BlogPostRepository
     {
         try {
             $this->dbh->beginTransaction();
-            $stmt = $this->insertStatement();
+            $stmt = $this->insertOnePostStatement();
             $stmt->execute(static::asArray($post));
             $id = (int) $this->dbh->lastInsertId();
             $this->dbh->commit();
@@ -73,37 +126,43 @@ class BlogPostRepository
         }
     }
 
+    /**
+     * Finds a BlogPost entity by its primary key.
+     *
+     * @param int $pk
+     *
+     * @return BlogPost
+     */
     public function find($pk)
     {
-        $query = <<<SQL
-SELECT * FROM blog_post
-WHERE (published_at iS NULL OR published_at <= NOW()) AND id = :id
-SQL;
-
-        $stmt = $this->dbh->prepare($query);
-        $stmt->bindParam('id', $pk, \PDO::PARAM_INT);
+        $stmt = $this->selectOnePostStatement();
+        $stmt->bindValue('id', $pk, \PDO::PARAM_INT);
         $stmt->execute();
 
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
+        if (!$record = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            throw new BlogPostNotFoundException(sprintf('Blog post #%u does not exist or is not published!', $pk));
+        }
+
+        return $this->hydrateObject($record);
     }
 
     public function getMostRecentPosts($limit)
     {
-        $limit = (int) $limit;
+        $stmt = $this->selectMostRecentPostsStatement();
+        $stmt->bindValue('limit', (int) $limit, \PDO::PARAM_INT);
+        $stmt->execute();
 
-        $query = <<<SQL
-SELECT * FROM blog_post
-WHERE published_at iS NULL or published_at <= NOW()
-ORDER BY published_at DESC
-LIMIT {$limit};
-SQL;
-
-        return $this->fetchAll($query);
+        return $this->fetchAll($stmt);
     }
 
-    private function fetchAll($sql)
+    private function fetchAll(\PDOStatement $stmt)
     {
-        return $this->query($sql)->fetchAll(\PDO::FETCH_ASSOC);
+        $entities = [];
+        foreach ($stmt->fetchAll(\PDO::FETCH_ASSOC) as $record) {
+            $entities[] = $this->hydrateObject($record);
+        }
+
+        return $entities;
     }
 
     private function query($sql)
@@ -123,5 +182,16 @@ SQL;
         $rp = $ro->getProperty('id');
         $rp->setAccessible(true);
         $rp->setValue($post, $pk);
+    }
+
+    private function hydrateObject(array $record)
+    {
+        $post = BlogPost::fromArray($record);
+
+        if (!empty($record['id'])) {
+            $this->populateEntityPk($post, $record['id']);
+        }
+
+        return $post;
     }
 }

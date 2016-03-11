@@ -7,6 +7,7 @@ class BlogPost
     private $id;
     private $title;
     private $content;
+    private $htmlContent;
     private $publishedAt;
 
     /**
@@ -14,12 +15,13 @@ class BlogPost
      *
      * @param string $title
      * @param string $content
+     * @param string $htmlContent
      * @param string $publishedAt
      */
-    public function __construct($title, $content, $publishedAt = 'now')
+    public function __construct($title, $content, $htmlContent = null, $publishedAt = 'now')
     {
         $this->title = $title;
-        $this->content = $content;
+        $this->changeContent($content, $htmlContent);
         $this->publishedAt = new \DateTime($publishedAt);
     }
 
@@ -42,11 +44,16 @@ class BlogPost
             throw new \LogicException('The content property is missing.');
         }
 
+        if (empty($data['html_content'])) {
+            throw new \LogicException('The html_content property is missing.');
+        }
+
         $publishedAt = 'now';
         if (!empty($data['published_at'])) {
             $publishedAt = $data['published_at'];
         }
-        return new self($data['title'], $data['content'], $publishedAt);
+
+        return new self($data['title'], $data['content'], $data['html_content'], $publishedAt);
     }
 
     public function getId()
@@ -64,6 +71,11 @@ class BlogPost
         return $this->content;
     }
 
+    public function getHtmlContent()
+    {
+        return $this->htmlContent;
+    }
+
     /**
      * @return \DateTime
      */
@@ -77,9 +89,10 @@ class BlogPost
         $this->title = $newTitle;
     }
 
-    public function changeContent($newContent)
+    public function changeContent($newContent, $newHtmlContent = null)
     {
         $this->content = $newContent;
+        $this->htmlContent = $newHtmlContent;
     }
 
     public function changePublicationDate($newPublicationDate)

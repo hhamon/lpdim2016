@@ -6,6 +6,7 @@ use Application\Blog\BlogPostRepository;
 use Application\ErrorHandler;
 use Application\LoggerHandler;
 use Application\Twig\RoutingExtension;
+use Application\Twig\TextExtension;
 use Framework\ControllerFactory;
 use Framework\ControllerListener;
 use Framework\DefaultControllerNameParser;
@@ -71,6 +72,7 @@ $dic->register('twig', function (ServiceLocator $dic) {
         $dic->getParameter('twig.options')
     );
     $twig->addExtension(new RoutingExtension($dic->getService('url_generator')));
+    $twig->addExtension(new TextExtension());
 
     return $twig;
 });

@@ -31,7 +31,7 @@ class Form implements FormInterface, RequestHandlerInterface
             return $this->data;
         }
 
-        return call_user_func_array($normalizer, [$this, $this->data]);
+        return call_user_func_array($normalizer, [$this->data, $this]);
     }
 
     public function isSubmitted()
