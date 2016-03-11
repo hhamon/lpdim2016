@@ -21,10 +21,11 @@ class RouterListener
     {
         $request = $event->getRequest();
         $context = RequestContext::createFromRequest($request);
-        $request->setAttributes($this->router->match($context));
 
         if ($this->urlGenerator) {
             $this->urlGenerator->setRequestContext($context);
         }
+
+        $request->setAttributes($this->router->match($context));
     }
 }

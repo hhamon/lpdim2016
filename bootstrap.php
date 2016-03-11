@@ -2,9 +2,9 @@
 
 require_once __DIR__.'/vendor/autoload.php';
 
+use Application\Blog\BlogPostRepository;
 use Application\ErrorHandler;
 use Application\LoggerHandler;
-use Application\Repository\BlogPostRepository;
 use Application\Twig\RoutingExtension;
 use Framework\ControllerFactory;
 use Framework\ControllerListener;

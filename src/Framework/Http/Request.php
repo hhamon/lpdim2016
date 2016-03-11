@@ -173,6 +173,11 @@ class Request extends AbstractMessage implements RequestInterface, AttributeHold
         return $this->method;
     }
 
+    public function isMethod($method)
+    {
+        return $method === $this->method;
+    }
+
     public function getPath()
     {
         return $this->path;

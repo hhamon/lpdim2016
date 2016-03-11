@@ -15,8 +15,10 @@ interface RequestInterface extends MessageInterface
     const DELETE = 'DELETE';
 
     public function getMethod();
+    public function isMethod($method);
     public function getPath();
     public function getDomain();
     public function getPort();
     public function getScriptName();
+    public function getRequestParameter($name, $default = null);
 }
