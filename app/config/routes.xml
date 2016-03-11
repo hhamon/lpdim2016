@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <routes>
     <route name="homepage" path="/" methods="GET">
-        <param key="_controller">Application\Controller\Blog\ListPostsAction</param>
+        <param key="_controller">App:Blog:ListPosts</param>
     </route>
 
     <route name="login" path="/login" methods="GET|POST">
@@ -22,6 +22,6 @@
     </route>
 
     <route name="hello" path="/hello" methods="GET">
-        <param key="_controller">Application\Controller\HelloWorldAction</param>
+        <param key="_controller">App:HelloWorld</param>
     </route>
 </routes>

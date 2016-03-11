@@ -8,6 +8,7 @@ use Application\Repository\BlogPostRepository;
 use Application\Twig\RoutingExtension;
 use Framework\ControllerFactory;
 use Framework\ControllerListener;
+use Framework\DefaultControllerNameParser;
 use Framework\EventManager\EventManager;
 use Framework\HttpKernel;
 use Framework\KernelEvents;
@@ -23,6 +24,7 @@ use Framework\Routing\UrlGenerator;
 use Framework\ServiceLocator\ServiceLocator;
 use Framework\Session\Driver\NativeDriver;
 use Framework\Session\Session;
+use Framework\ShortNotationControllerNameParser;
 use Framework\Templating\TwigRendererAdapter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -127,10 +129,11 @@ $dic->register('event_manager', function (ServiceLocator $dic) {
 });
 
 $dic->register('http_kernel', function (ServiceLocator $dic) {
-    return new HttpKernel(
-        $dic->getService('event_manager'),
-        new ControllerFactory()
-    );
+    $factory = new ControllerFactory(new ShortNotationControllerNameParser(new DefaultControllerNameParser(), [
+        'App' => 'Application\\Controller',
+    ]));
+
+    return new HttpKernel($dic->getService('event_manager'), $factory);
 });
 
 return $dic;
