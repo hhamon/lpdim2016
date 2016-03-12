@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\Framework\Routing\Loader;
+namespace Tests\Framework\Routing\Loader;
 
 use Framework\Routing\Loader\CompositeFileLoader;
 use Framework\Routing\Loader\PhpFileLoader;

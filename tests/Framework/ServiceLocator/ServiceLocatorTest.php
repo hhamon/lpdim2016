@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\Framework\ServiceLocator;
+namespace Tests\Framework\ServiceLocator;
 
 use Framework\ServiceLocator\ServiceLocator;
 

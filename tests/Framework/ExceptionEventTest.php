@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\Framework;
+namespace Tests\Framework;
 
 use Framework\ExceptionEvent;
 use Framework\Http\Request;

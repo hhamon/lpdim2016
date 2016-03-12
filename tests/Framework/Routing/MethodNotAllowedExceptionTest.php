@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\Framework\Routing;
+namespace Tests\Framework\Routing;
 
 use Framework\Routing\MethodNotAllowedException;
 
