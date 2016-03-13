@@ -12,6 +12,8 @@ class CreatePostAction extends AbstractAction
 {
     public function __invoke(Request $request)
     {
+        $this->denyAccessUnlessGranted('AUTHOR');
+
         $form = new CreateBlogPostForm(new BlogPostValidator());
         $form->handleRequest($request);
 

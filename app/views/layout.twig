@@ -11,15 +11,29 @@
             <li>
                 <a href="{{ path('blog') }}">Blog</a>
             </li>
+            {% if is_granted('AUTHOR') %}
             <li>
                 <a href="{{ path('create_blog_post') }}">Nouveau Billet</a>
             </li>
+            {% endif %}
+
+            {% if not is_anonymous() %}
             <li>
                 <a href="{{ path('dashboard') }}">Dashboard</a>
             </li>
             <li>
-                <a href="{{ path('login') }}">Login</a>
+                <a href="{{ path('logout') }}">Déconnexion</a>
             </li>
+            {% endif %}
+
+            {% if is_anonymous() %}
+            <li>
+                <a href="{{ path('user_signup') }}">Inscription</a>
+            </li>
+            <li>
+                <a href="{{ path('login') }}">Connexion</a>
+            </li>
+            {% endif %}
         </ul>
         <h1>{{ block('title') }}</h1>
         {% block body %}{% endblock %}

@@ -5,8 +5,11 @@ require_once __DIR__.'/vendor/autoload.php';
 use Application\Blog\BlogPostRepository;
 use Application\ErrorHandler;
 use Application\LoggerHandler;
+use Application\SecurityErrorHandler;
 use Application\Twig\RoutingExtension;
+use Application\Twig\SecurityExtension;
 use Application\Twig\TextExtension;
+use Application\User\UserRepository;
 use Framework\ControllerFactory;
 use Framework\ControllerListener;
 use Framework\DefaultControllerNameParser;
@@ -22,6 +25,13 @@ use Framework\Routing\Loader\PhpFileLoader;
 use Framework\Routing\Loader\XmlFileLoader;
 use Framework\Routing\Loader\YamlFileLoader;
 use Framework\Routing\UrlGenerator;
+use Framework\Security\Authentication\AuthenticationListener;
+use Framework\Security\Authentication\AuthenticationManager;
+use Framework\Security\Authentication\FormLoginAuthenticator;
+use Framework\Security\Authentication\LogoutAuthenticator;
+use Framework\Security\Authentication\TokenStorage;
+use Framework\Security\Password\MessageDigestPasswordEncoder;
+use Framework\Security\Security;
 use Framework\ServiceLocator\ServiceLocator;
 use Framework\Session\Driver\NativeDriver;
 use Framework\Session\Session;
@@ -57,6 +67,10 @@ $dic->register('repository.blog_post', function (ServiceLocator $dic) {
     return new BlogPostRepository($dic->getService('database'));
 });
 
+$dic->register('repository.user', function (ServiceLocator $dic) {
+    return new UserRepository($dic->getService('database'));
+});
+
 $dic->register('database', function (ServiceLocator $dic) {
     return new \PDO(
         $dic->getParameter('database.dsn'),
@@ -73,6 +87,7 @@ $dic->register('twig', function (ServiceLocator $dic) {
     );
     $twig->addExtension(new RoutingExtension($dic->getService('url_generator')));
     $twig->addExtension(new TextExtension());
+    $twig->addExtension(new SecurityExtension($dic->getService('security')));
 
     return $twig;
 });
@@ -111,6 +126,10 @@ $dic->register('session', function (ServiceLocator $dic) {
     return new Session(new NativeDriver(), $dic->getParameter('session.options'));
 });
 
+$dic->register('security.password_encoder', function (ServiceLocator $dic) {
+    return new MessageDigestPasswordEncoder($dic->getParameter('security.hash_algo'));
+});
+
 $dic->register('logger', function (ServiceLocator $dic) {
     $level = $dic->getParameter('app.debug') ? Logger::WARNING : Logger::CRITICAL;
 
@@ -120,12 +139,50 @@ $dic->register('logger', function (ServiceLocator $dic) {
     return $logger;
 });
 
+$dic->register('security.token_storage', function () {
+    return new TokenStorage();
+});
+
+$dic->register('security.logout_authenticator', function (ServiceLocator $dic) {
+    return new LogoutAuthenticator($dic->getService('security.authentication_manager'));
+});
+
+$dic->register('security.authenticator', function (ServiceLocator $dic) {
+    return new FormLoginAuthenticator(
+        $dic->getService('repository.user'),
+        $dic->getService('security.password_encoder'),
+        $dic->getService('security.authentication_manager')
+    );
+});
+
+$dic->register('security.authentication_manager', function (ServiceLocator $dic) {
+    return new AuthenticationManager($dic->getService('security.token_storage'), $dic->getService('session'));
+});
+
+$dic->register('security.authentication_listener', function (ServiceLocator $dic) {
+    return new AuthenticationListener(
+        $dic->getService('security.authentication_manager'),
+        $dic->getService('repository.user')
+    );
+});
+
+$dic->register('security.error_handler', function (ServiceLocator $dic) {
+    return new SecurityErrorHandler($dic->getService('url_generator'), $dic->getService('renderer'));
+});
+
+$dic->register('security', function (ServiceLocator $dic) {
+    return new Security($dic->getService('security.token_storage'));
+});
+
+
 $dic->register('event_manager', function (ServiceLocator $dic) {
     $manager = new EventManager();
-    $manager->addEventListener(KernelEvents::REQUEST, [ new RouterListener($dic->getService('router'), $dic->getService('url_generator')), 'onKernelRequest' ]);
-    $manager->addEventListener(KernelEvents::CONTROLLER, [ new ControllerListener($dic), 'onKernelController' ]);
-    $manager->addEventListener(KernelEvents::EXCEPTION, [ new LoggerHandler($dic->getService('logger')), 'onKernelException' ]);
-    $manager->addEventListener(KernelEvents::EXCEPTION, [ $dic->getService('error_handler'), 'onKernelException' ]);
+    $manager->addEventListener(KernelEvents::REQUEST, [new RouterListener($dic->getService('router'), $dic->getService('url_generator')), 'onKernelRequest']);
+    $manager->addEventListener(KernelEvents::REQUEST, [$dic->getService('security.authentication_listener'), 'onKernelRequest']);
+    $manager->addEventListener(KernelEvents::CONTROLLER, [new ControllerListener($dic), 'onKernelController']);
+    $manager->addEventListener(KernelEvents::EXCEPTION, [new LoggerHandler($dic->getService('logger')), 'onKernelException']);
+    $manager->addEventListener(KernelEvents::EXCEPTION, [$dic->getService('security.error_handler'), 'onKernelException']);
+    $manager->addEventListener(KernelEvents::EXCEPTION, [$dic->getService('error_handler'), 'onKernelException']);
 
     return $manager;
 });

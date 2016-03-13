@@ -2,22 +2,13 @@
 
 namespace Application\Blog;
 
-class BlogPostRepository
+use Framework\Persistence\AbstractRepository;
+
+class BlogPostRepository extends AbstractRepository
 {
-    private $dbh;
     private $insertOnePostStmt;
     private $selectOnePostStmt;
     private $selectMostRecentPostsStmt;
-
-    /**
-     * Constructor.
-     *
-     * @param \PDO $dbh
-     */
-    public function __construct(\PDO $dbh)
-    {
-        $this->dbh = $dbh;
-    }
 
     /**
      * Extracts the blog post state as an associative array.
@@ -54,7 +45,7 @@ VALUES
 (:title, :content, :htmlContent, :publishedAt);
 SQL;
 
-        $this->insertOnePostStmt = $this->dbh->prepare($query);
+        $this->insertOnePostStmt = $this->prepare($query);
 
         return $this->insertOnePostStmt;
     }
@@ -75,7 +66,7 @@ SELECT * FROM blog_post
 WHERE (published_at iS NULL OR published_at <= NOW()) AND id = :id;
 SQL;
 
-        $this->selectOnePostStmt = $this->dbh->prepare($query);
+        $this->selectOnePostStmt = $this->prepare($query);
 
         return $this->selectOnePostStmt;
     }
@@ -98,32 +89,27 @@ ORDER BY published_at DESC
 LIMIT :limit;
 SQL;
 
-        $this->selectMostRecentPostsStmt = $this->dbh->prepare($query);
+        $this->selectMostRecentPostsStmt = $this->prepare($query);
 
         return $this->selectMostRecentPostsStmt;
     }
 
     /**
      * Saves a blog post to the database.
-     
+     *
      * @param BlogPost $post
      * @throws \Exception
      */
     public function save(BlogPost $post)
     {
-        try {
-            $this->dbh->beginTransaction();
+        $id = $this->executeTransaction(function () use ($post) {
             $stmt = $this->insertOnePostStatement();
             $stmt->execute(static::asArray($post));
-            $id = (int) $this->dbh->lastInsertId();
-            $this->dbh->commit();
-            $this->populateEntityPk($post, $id);
-        } catch (\PDOException $e) {
-            $this->dbh->rollBack();
-            throw $e;
-        } catch (\Exception $e) {
-            throw $e;
-        }
+
+            return (int) $this->lastInsertId();
+        });
+
+        static::populateEntityPk($post, $id);
     }
 
     /**
@@ -165,31 +151,12 @@ SQL;
         return $entities;
     }
 
-    private function query($sql)
-    {
-        return $this->dbh->query($sql);
-    }
-
-    /**
-     * Sets the primary key of the blog post entity using a PHP Reflection trick.
-     *
-     * @param BlogPost $post The blog post to modify
-     * @param int      $pk   The blog post primary key
-     */
-    private function populateEntityPk(BlogPost $post, $pk)
-    {
-        $ro = new \ReflectionObject($post);
-        $rp = $ro->getProperty('id');
-        $rp->setAccessible(true);
-        $rp->setValue($post, $pk);
-    }
-
     private function hydrateObject(array $record)
     {
         $post = BlogPost::fromArray($record);
 
         if (!empty($record['id'])) {
-            $this->populateEntityPk($post, $record['id']);
+            static::populateEntityPk($post, $record['id']);
         }
 
         return $post;
