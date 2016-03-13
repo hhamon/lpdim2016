@@ -3,6 +3,8 @@
 namespace Test\Framework;
 
 use Framework\ControllerFactory;
+use Framework\DefaultControllerNameParser;
+use Tests\Framework\Fixtures\Controller\DemoAction;
 
 class ControllerFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -11,7 +13,7 @@ class ControllerFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testControllerClassDoesNotExist()
     {
-        $factory = new ControllerFactory();
+        $factory = new ControllerFactory(new DefaultControllerNameParser());
         $factory->createController([ '_controller' => 'FOOOOOOOOOOOOOO' ]);
     }
 
@@ -20,7 +22,7 @@ class ControllerFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testControllerNameIsNotDefined()
     {
-        $factory = new ControllerFactory();
+        $factory = new ControllerFactory(new DefaultControllerNameParser());
         $factory->createController([ 'foo' => 'bar' ]);
     }
 
@@ -29,22 +31,14 @@ class ControllerFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateNotInvokableController()
     {
-        $factory = new ControllerFactory();
+        $factory = new ControllerFactory(new DefaultControllerNameParser());
         $factory->createController([ '_controller' => 'stdClass' ]);
     }
 
     public function testCreateController()
     {
-        $factory = new ControllerFactory();
+        $factory = new ControllerFactory(new DefaultControllerNameParser());
 
-        $this->assertInstanceOf(FooBar::class, $factory->createController([ '_controller' => FooBar::class ]));
-    }
-}
-
-class FooBar
-{
-    public function __invoke()
-    {
-        
+        $this->assertInstanceOf(DemoAction::class, $factory->createController([ '_controller' => DemoAction::class ]));
     }
 }

@@ -1,0 +1,4 @@
+homepage:
+    path: /
+    # requirements value is invalid
+    requirements: 123

@@ -1,0 +1,8 @@
+{
+  "routes": {
+    "homepage": {
+      "path": "/home",
+      "requirements": "123"
+    }
+  }
+}

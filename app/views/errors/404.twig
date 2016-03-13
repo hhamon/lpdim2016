@@ -1,10 +1,10 @@
 {% extends 'layout.twig' %}
 
-{% block title %}Page Not Found{% endblock %}
+{% block title %}La page demandée n'existe pas !{% endblock %}
 
 {% block body %}
     <p>
-        The URL "{{ request.path }}" does not exist!
+        La page "{{ request.path }}" n'existe pas ou n'existe plus !
     </p>
 
     {% if debug %}

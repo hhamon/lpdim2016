@@ -13,7 +13,7 @@ class NativeDriver implements DriverInterface
     {
         $this->allowOverride = (bool) $allowOverride;
         $this->namespace = $namespace;
-        $_SESSION = [];
+        $_SESSION[$namespace] = [];
     }
 
     public function clear($id)
@@ -46,7 +46,7 @@ class NativeDriver implements DriverInterface
 
     private function doFetch($id, $key)
     {
-        if (array_key_exists($key, $_SESSION[$this->namespace])) {
+        if (array_key_exists($key, (array) $_SESSION[$this->namespace])) {
             return $_SESSION[$this->namespace][$key];
         }
     }

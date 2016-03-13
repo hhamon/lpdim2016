@@ -1,0 +1,7 @@
+{
+  "routes": {
+    "++home-page": {
+      "path": "/home"
+    }
+  }
+}

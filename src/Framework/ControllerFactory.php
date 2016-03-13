@@ -4,10 +4,23 @@ namespace Framework;
 
 class ControllerFactory implements ControllerFactoryInterface
 {
+    private $parser;
+
+    /**
+     * Constructor.
+     *
+     * @param ControllerNameParserInterface $parser
+     */
+    public function __construct(ControllerNameParserInterface $parser)
+    {
+        $this->parser = $parser;
+    }
+
     /**
      * Creates an invokable controller.
      *
      * @param array $params
+     *
      * @return \callable
      */
     public function createController(array $params)
@@ -16,10 +29,7 @@ class ControllerFactory implements ControllerFactoryInterface
             throw new \RuntimeException('No _controller parameter found.');
         }
 
-        $class = $params['_controller'];
-        if (!class_exists($class)) {
-            throw new \RuntimeException(sprintf('Controller class "%s" does not exist or cannot be autoloaded.', $class));
-        }
+        $class = $this->parser->getClass($params['_controller']);
 
         $action = new $class();
         if (!method_exists($action, '__invoke')) {

@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <routes>
     <route name="homepage" path="/" methods="GET">
-        <param key="_controller">Application\Controller\Blog\ListPostsAction</param>
+        <param key="_controller">App:Blog:ListPosts</param>
     </route>
 
     <route name="login" path="/login" methods="GET|POST">
         <param key="_controller">Application\Controller\LoginAction</param>
+    </route>
+
+    <route name="logout" path="/logout" methods="GET">
+        <param key="_controller">Application\Controller\LogoutAction</param>
     </route>
 
     <route name="dashboard" path="/dashboard" methods="GET">
@@ -21,7 +25,19 @@
         <requirement key="id">\d+</requirement>
     </route>
 
+    <route name="create_blog_post" path="/blog/new-post" methods="GET|POST">
+        <param key="_controller">Application\Controller\Blog\CreatePostAction</param>
+    </route>
+
+    <route name="user_signup" path="/signup" methods="GET|POST">
+        <param key="_controller">Application\Controller\User\SignupAction</param>
+    </route>
+
+    <route name="user_signup_success" path="/signup-success" methods="GET">
+        <param key="_controller">Application\Controller\User\SignupSuccessAction</param>
+    </route>
+
     <route name="hello" path="/hello" methods="GET">
-        <param key="_controller">Application\Controller\HelloWorldAction</param>
+        <param key="_controller">App:HelloWorld</param>
     </route>
 </routes>

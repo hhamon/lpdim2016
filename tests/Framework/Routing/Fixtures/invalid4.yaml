@@ -1,0 +1,3 @@
+# invalid route name
+++home-page:
+    path: /foo

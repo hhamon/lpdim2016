@@ -64,6 +64,15 @@ class RouteCollection implements \Iterator, \Countable
         return $this->routes;
     }
 
+    public function getRoute($name)
+    {
+        if (!isset($this->routes[$name])) {
+            throw new RouteNotFoundException(sprintf('Route "%s" does not exist.', $name));
+        }
+
+        return $this->routes[$name];
+    }
+
     public function current()
     {
         return current($this->routes);

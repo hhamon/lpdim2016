@@ -1,0 +1,4 @@
+homepage:
+    path: /
+    # methods name is invalid
+    methods: 123

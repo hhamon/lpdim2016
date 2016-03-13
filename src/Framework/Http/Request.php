@@ -10,6 +10,7 @@ class Request extends AbstractMessage implements RequestInterface, AttributeHold
     private $queryParameters;
     private $requestParameters;
     private $cookieParameters;
+    private $serverParameters;
 
     /**
      * Constructor.
@@ -31,6 +32,7 @@ class Request extends AbstractMessage implements RequestInterface, AttributeHold
         $this->requestParameters = [];
         $this->cookieParameters = [];
         $this->queryParameters = [];
+        $this->serverParameters = [];
     }
 
     private function setMethod($method)
@@ -108,6 +110,10 @@ class Request extends AbstractMessage implements RequestInterface, AttributeHold
             $request->cookieParameters = $_COOKIE;
         }
 
+        if (isset($_SERVER)) {
+            $request->serverParameters = $_SERVER;
+        }
+
         return $request;
     }
 
@@ -167,6 +173,11 @@ class Request extends AbstractMessage implements RequestInterface, AttributeHold
         return $this->method;
     }
 
+    public function isMethod($method)
+    {
+        return $method === $this->method;
+    }
+
     public function getPath()
     {
         return $this->path;
@@ -204,5 +215,20 @@ class Request extends AbstractMessage implements RequestInterface, AttributeHold
     public function hasAttribute($name)
     {
         return isset($this->attributes[$name]);
+    }
+
+    public function getDomain()
+    {
+        return !empty($this->serverParameters['SERVER_NAME']) ? $this->serverParameters['SERVER_NAME'] : '';
+    }
+
+    public function getPort()
+    {
+        return !empty($this->serverParameters['REMOTE_PORT']) ? $this->serverParameters['REMOTE_PORT'] : 80;
+    }
+
+    public function getScriptName()
+    {
+        return !empty($this->serverParameters['SCRIPT_NAME']) ? $this->serverParameters['SCRIPT_NAME'] : '';
     }
 }

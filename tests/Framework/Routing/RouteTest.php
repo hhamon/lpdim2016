@@ -80,5 +80,9 @@ class RouteTest extends \PHPUnit_Framework_TestCase
         $this->assertSame([ 'GET', 'POST', 'HEAD' ], $route->getMethods());
         $this->assertSame([ 'id' => '\d+' ], $route->getRequirements());
         $this->assertSame('\d+', $route->getRequirement('id'));
+        $this->assertTrue($route->matchRequirement('id', '3'));
+        $this->assertTrue($route->matchRequirement('id', '32'));
+        $this->assertFalse($route->matchRequirement('id', 'foo'));
+        $this->assertSame(['id'], $route->getPathTokens());
     }
 }

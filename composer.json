@@ -23,6 +23,7 @@
     "require": {
         "twig/twig": "^1.23",
         "symfony/yaml": "^3.0",
-        "monolog/monolog": "^1.17"
+        "monolog/monolog": "^1.17",
+        "michelf/php-markdown": "^1.6"
     }
 }

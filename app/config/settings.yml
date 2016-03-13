@@ -4,3 +4,4 @@ parameters:
     database.password: ~
     app.environment: dev
     app.debug: true
+    security.hash_algo: sha512

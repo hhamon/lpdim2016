@@ -1,0 +1,9 @@
+{
+  "routes": {
+    "homepage": {
+      "params": {
+        "_controller": "Application\\Controller\\Blog\\ListPostsAction"
+      }
+    }
+  }
+}

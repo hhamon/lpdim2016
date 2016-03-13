@@ -1,0 +1,4 @@
+homepage:
+    path: /
+    # params value is invalid
+    params: 123

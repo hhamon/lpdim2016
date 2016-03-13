@@ -2,28 +2,23 @@
 
 namespace Framework\Routing;
 
-use Framework\Routing\Loader\FileLoaderInterface;
+use Framework\Routing\Loader\LazyFileLoaderInterface;
 
 class Router implements UrlMatcherInterface
 {
-    private $routes;
     private $loader;
-    private $configuration;
 
-    public function __construct($configuration, FileLoaderInterface $loader)
+    public function __construct(LazyFileLoaderInterface $loader)
     {
-        $this->configuration = $configuration;
         $this->loader = $loader;
     }
 
     public function match(RequestContext $context)
     {
-        if (null === $this->routes) {
-            $this->routes = $this->loader->load($this->configuration);
-        }
+        $routes = $this->loader->load();
 
         $path = $context->getPath();
-        if (!$route = $this->routes->match($path)) {
+        if (!$route = $routes->match($path)) {
             throw new RouteNotFoundException(sprintf('No route found for path %s.', $path));
         }
 
@@ -34,7 +29,7 @@ class Router implements UrlMatcherInterface
         }
 
         return array_merge(
-            [ '_route' => $this->routes->getName($route) ],
+            [ '_route' => $routes->getName($route) ],
             $route->getParameters()
         );
     }
