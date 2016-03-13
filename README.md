@@ -112,7 +112,7 @@ Les développeurs et mainteneurs du coeur de PHP forment aujourd'hui une équipe
 * **Zeev Suraski** : l'un des co-créateurs de PHP 3 et co-foundateur de la société Zend,
 * **Andi Gutmans** : l'un des co-créateurs de PHP 3 et co-foundateur de la société Zend,
 * **Pierre Joye** : développeur indépendant en charge du support de PHP sur les plateformes Microsoft Windows et Azure Cloud,
-* **Sara Golemon** : développeuse Hack/HHVM chez Facebook, contributrice à PHP,
+* **Sara Golemon** : développeuse Hack/HHVM (Facebook), contributrice à PHP,
 * **Anthony Ferrara** : contributeur à PHP,
 * **Julien Pauli** : contributeur à PHP, release manager de PHP 5.5 / 5.6,
 * **Derick Rethans** : contributeur historique à PHP, auteur de l'extension XDebug,
@@ -2203,15 +2203,12 @@ testables.
   petites interfaces spécialisées plutôt qu'une grosse interface afin d'obtenir
   seulement les méthodes dont elles ont besoin.
 
-* **D**ependency Injection Principle ou « principe d'injection des dépendances »
-  qui stipule que les objets doivent recevoir leurs dépendances (collaborateurs)
-  en paramètres de leur constructeur ou de méthodes *setter*. Les collaborateurs
-  sont donc créés en dehors de l'objet puis injectés dans ce dernier. La
-  réciproque de ce principe dit aussi que les objets doivent dépendre
-  d'abstractions plutôt que d'implémentations. Cela signifie qu'il est
-  préférable de typer des arguments avec des types abstraits (classes concrètes
-  ou interfaces) plutôt que des types concrets (classes concrètes) afin de
-  diminuer les couplages et favoriser d'autres implémentations.
+* **D**ependency Inversion Principle ou « principe d'inversion des dépendances »
+  qui stipule que les objets doivent dépendre d'abstractions plutôt que
+  d'implémentations. Cela signifie qu'il est préférable de typer des arguments
+  avec des types abstraits (classes concrètes ou interfaces) plutôt que
+  des types concrets (classes concrètes) afin de diminuer les couplages
+  et favoriser d'autres implémentations.
 
 Objets de Valeur
 ----------------
